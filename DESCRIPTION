@@ -1,0 +1,23 @@
+Package: unsurv
+Title: Unsupervised Clustering of Individualized Survival Curves
+Version: 0.1.0
+Authors@R: c(
+    person("Imad", "EL BADISY", email = "your@email", role = c("aut","cre")))
+Description: Tools for clustering individualized survival curves using medoid-based (PAM) algorithm,
+    with monotonic enforcement, optional smoothing, weighted distances (L1/L2), automatic K selection
+    via silhouette, prediction for new curves, basic stability checks, and plotting helpers.
+License: MIT + file LICENSE
+Encoding: UTF-8
+Roxygen: list(markdown = TRUE)
+RoxygenNote: 7.3.2
+Depends: R (>= 3.6)
+Imports:
+    stats,
+    cluster,
+    ggplot2,
+    tidyr,
+    dplyr,
+    scales
+Suggests:
+    testthat (>= 3.0.0)
+Config/testthat/edition: 3
