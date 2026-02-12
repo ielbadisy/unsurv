@@ -233,13 +233,14 @@ plot_stability <- function(stab) {
 
 #' ggplot2 autoplot for unsurv objects
 #'
-#' This method requires the \pkg{ggplot2} package.
-#'
 #' @param object An object of class \code{"unsurv"}.
 #' @param ... Unused.
 #'
 #' @return A ggplot object.
+#'
 #' @export
+#' @method autoplot unsurv
+#' @importFrom ggplot2 autoplot
 autoplot.unsurv <- function(object, ...) {
   if (!requireNamespace("ggplot2", quietly = TRUE)) {
     stop("Install 'ggplot2' to use autoplot().", call. = FALSE)
