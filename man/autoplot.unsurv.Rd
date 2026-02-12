@@ -4,7 +4,7 @@
 \alias{autoplot.unsurv}
 \title{ggplot2 autoplot for unsurv objects}
 \usage{
-autoplot.unsurv(object, ...)
+\method{autoplot}{unsurv}(object, ...)
 }
 \arguments{
 \item{object}{An object of class \code{"unsurv"}.}
@@ -15,5 +15,5 @@ autoplot.unsurv(object, ...)
 A ggplot object.
 }
 \description{
-This method requires the \pkg{ggplot2} package.
+ggplot2 autoplot for unsurv objects
 }
