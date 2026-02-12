@@ -214,8 +214,8 @@ Core functions:
 
 If you use unsurv, please cite:
 
-```
-El Badisy, I. (2026). unsurv: Unsupervised clustering of individualized survival curves.
+```{r}
+citation("unsurv")
 ```
 
 
@@ -226,9 +226,11 @@ MIT License © Imad EL BADISY
 
 # Development status
 
-[X] Stable core implementation
-[X] Full test suite
-[] CRAN submission ready
+- Stable core implementation
+
+- Full test suite
+
+- CRAN submission ready
 
 
 # Links

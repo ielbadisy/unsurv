@@ -204,7 +204,22 @@ Core functions:
 
 If you use unsurv, please cite:
 
-    El Badisy, I. (2026). unsurv: Unsupervised clustering of individualized survival curves.
+``` r
+citation("unsurv")
+#> To cite package 'unsurv' in publications use:
+#> 
+#>   EL BADISY I (2026). _unsurv: Unsupervised Clustering of
+#>   Individualized Survival Curves_. R package version 0.1.0.
+#> 
+#> A BibTeX entry for LaTeX users is
+#> 
+#>   @Manual{,
+#>     title = {unsurv: Unsupervised Clustering of Individualized Survival Curves},
+#>     author = {Imad {EL BADISY}},
+#>     year = {2026},
+#>     note = {R package version 0.1.0},
+#>   }
+```
 
 # License
 
@@ -212,8 +227,11 @@ MIT License © Imad EL BADISY
 
 # Development status
 
-\[X\] Stable core implementation \[X\] Full test suite \[\] CRAN
-submission ready
+- Stable core implementation
+
+- Full test suite
+
+- CRAN submission ready
 
 # Links
 
