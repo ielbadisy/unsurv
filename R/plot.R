@@ -1,61 +1,117 @@
-plot_surv_medoids <- function(fit) {
-  if (!requireNamespace("ggplot2", quietly = TRUE) ||
-      !requireNamespace("tidyr", quietly = TRUE) ||
-      !requireNamespace("dplyr", quietly = TRUE) ||
-      !requireNamespace("scales", quietly = TRUE)) {
-    stop("Install ggplot2, tidyr, dplyr, scales for plotting.")
+## ---- main user function (export in package as 'unsurv') ----
+unsurv <- function(
+    S, times,
+    K = NULL, K_max = 10,
+    distance = c("L2", "L1"),
+    weights = NULL,
+    enforce_monotone = TRUE,
+    smooth_median_width = 0,
+    standardize_cols = FALSE,
+    eps_jitter = 0.001,
+    seed = NULL
+){
+  if (!requireNamespace("cluster", quietly = TRUE)) stop("Install 'cluster' package.")
+  distance <- match.arg(distance)
+  if (!is.null(seed)) set.seed(seed)
+  
+  S <- .check_inputs(S, times)
+  S <- .clamp01(S)
+  if (isTRUE(enforce_monotone)) S <- .enforce_monotone(S)
+  if (smooth_median_width >= 3 && smooth_median_width %% 2 == 1)
+    S <- .smooth_median(S, smooth_median_width)
+  
+  # weights (default trapezoid)
+  w <- if (is.null(weights)) .trap_weights(times) else {
+    if (length(weights) != ncol(S)) stop("'weights' length must equal number of time points.")
+    if (any(weights < 0)) stop("'weights' must be nonnegative.")
+    sw <- sum(weights)
+    if (sw <= 0) stop("'weights' must sum to a positive value.")
+    weights / sw
   }
-  med <- as.data.frame(fit$medoids)
-  colnames(med) <- paste0("t", seq_along(fit$times))
-  med$cluster <- factor(seq_len(nrow(med)))
-  long <- tidyr::pivot_longer(med, dplyr::starts_with("t"),
-                              names_to = "gid", values_to = "S") |>
-    dplyr::mutate(t = fit$times[as.integer(sub("t", "", gid))])
-  ggplot2::ggplot(long, ggplot2::aes(t, S, color = cluster)) +
-    ggplot2::geom_line(linewidth = 1) +
-    ggplot2::scale_y_continuous(labels = scales::percent_format()) +
-    ggplot2::labs(title = paste0("PAM medoid curves (K = ", fit$K, ")"),
-                  x = "Time", y = "Survival", color = "Cluster") +
-    ggplot2::theme_minimal()
-}
-
-
-
-plot_surv_samples <- function(S, times, clusters = NULL, alpha = 0.2) {
-  if (!requireNamespace("ggplot2", quietly = TRUE) ||
-      !requireNamespace("tidyr", quietly = TRUE) ||
-      !requireNamespace("dplyr", quietly = TRUE)) {
-    stop("Install ggplot2, tidyr, dplyr for plotting.")
+  
+  # weighted features
+  X <- .weight_features(S, w, distance)
+  
+  # optional column standardization
+  center <- NULL; scalev <- NULL
+  if (isTRUE(standardize_cols)) {
+    X <- scale(X)
+    center <- attr(X, "scaled:center")
+    scalev <- attr(X, "scaled:scale"); scalev[scalev == 0] <- 1
+    X <- as.matrix(X)
+  } else {
+    X <- as.matrix(X)
   }
-  S <- as.data.frame(S)
-  colnames(S) <- paste0("t", seq_along(times))
-  S$id <- seq_len(nrow(S))
-  if (!is.null(clusters)) S$cluster <- factor(clusters)
-  long <- tidyr::pivot_longer(S, dplyr::starts_with("t"),
-                              names_to = "gid", values_to = "S") |>
-    dplyr::mutate(t = times[as.integer(sub("t", "", gid))])
-  ggplot2::ggplot(long, ggplot2::aes(t, S, group = id,
-                                     color = if (!is.null(clusters)) cluster else NULL)) +
-    ggplot2::geom_line(alpha = alpha) +
-    ggplot2::labs(x = "Time", y = "Survival", color = "Cluster") +
-    ggplot2::theme_minimal()
+  
+  # tiny jitter to break ties / determinism
+  if (eps_jitter > 0) {
+    X <- X + matrix(stats::rnorm(length(X), 0, eps_jitter), nrow(X))
+  }
+  
+  D <- .build_dist(X, distance)
+  
+  n <- nrow(S)
+  
+  # choose K by silhouette if not provided
+  if (is.null(K)) {
+    K_max <- min(as.integer(K_max), n)
+    if (K_max < 2) stop("'K_max' must be >= 2 (and <= nrow(S)) when K is NULL.")
+    rng <- 2:K_max
+    sil <- rep(NA_real_, length(rng))
+    for (i in seq_along(rng)) {
+      pm <- cluster::pam(D, k = rng[i], diss = TRUE)
+      sil[i] <- mean(cluster::silhouette(pm$clustering, D)[, 3])
+    }
+    K <- rng[which.max(sil)]
+  } else {
+    K <- as.integer(K)
+    if (K < 2) stop("'K' must be >= 2.")
+    if (K > n) stop("'K' cannot exceed nrow(S).")
+  }
+  
+  pam_fit <- cluster::pam(D, k = K, diss = TRUE)
+  clusters <- pam_fit$clustering
+  medoid_indices <- pam_fit$id.med
+  medoids <- S[medoid_indices, , drop = FALSE]
+  sil_mean <- mean(cluster::silhouette(clusters, D)[, 3])
+  
+  out <- list(
+    clusters = as.integer(clusters),
+    K = as.integer(K),
+    times = as.numeric(times),
+    medoid_indices = as.integer(medoid_indices),
+    medoids = medoids,
+    silhouette_mean = as.numeric(sil_mean),
+    weights = w,
+    distance = distance,
+    standardize_cols = isTRUE(standardize_cols),
+    center = center,
+    scale = scalev,
+    enforce_monotone = isTRUE(enforce_monotone),
+    smooth_median_width = smooth_median_width,
+    eps_jitter = eps_jitter,
+    seed = seed
+  )
+  class(out) <- "unsurv"
+  out
 }
 
 
-plot_stability <- function(stab){
-  #if (!requireNamespace("ggplot2", quietly = TRUE)) stop("Install 'ggplot2'.")
-  if (is.list(stab) && !is.null(stab$aris)) {
-    aris <- stab$aris
-  } else if (is.numeric(stab)) {
-    aris <- stab
-  } else stop("Pass the list returned by cluster_stability(..., return_distribution=TRUE).")
-  df <- data.frame(ARI = aris)
-  ggplot2::ggplot(df, ggplot2::aes(ARI)) +
-    ggplot2::geom_histogram(bins = 20) +
-    ggplot2::geom_vline(xintercept = mean(aris), linetype = 2) +
-    ggplot2::labs(title = sprintf("Stability (mean ARI = %.3f)", mean(aris)),
-                  x = "Adjusted Rand Index across resamples", y = "Count") +
-    ggplot2::theme_minimal()
+## ---- base plotting: S3 method (export as plot.unsurv in package) ----
+plot.unsurv <- function(x, ...) {
+  stopifnot(inherits(x, "unsurv"))
+  times <- x$times
+  med <- x$medoids
+  if (is.null(med) || nrow(med) < 1L) stop("No medoids found in 'x$medoids'.")
+  if (length(times) != ncol(med)) stop("Dimension mismatch: length(x$times) must equal ncol(x$medoids).")
+  
+  K <- nrow(med)
+  graphics::matplot(times, t(med), type = "l", lty = 1,
+                    xlab = "Time", ylab = "Survival", ...)
+  graphics::legend("topright", legend = paste0("Cluster ", seq_len(K)),
+                   lty = 1, bty = "n")
+  invisible(x)
 }
+
 
 
