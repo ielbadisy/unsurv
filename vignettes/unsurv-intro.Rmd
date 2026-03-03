@@ -1,0 +1,114 @@
+---
+title: "Clustering Individualized Survival Curves with unsurv"
+author: "Imad EL BADISY"
+date: "`r format(Sys.Date())`"
+output: rmarkdown::html_vignette
+vignette: >
+  %\VignetteIndexEntry{Clustering Individualized Survival Curves with unsurv}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+---
+
+```{r setup, include = FALSE}
+knitr::opts_chunk$set(
+  collapse = TRUE,
+  comment = "#>",
+  fig.width = 7,
+  fig.height = 4.5
+)
+```
+
+The **unsurv** package clusters full survival trajectories rather than baseline covariates. This vignette walks through a minimal workflow: simulate curves, fit the model, choose the number of clusters automatically, predict new samples, and assess stability.
+
+## Simulate individualized survival curves
+
+We create three prognosis groups with different exponential hazards and add noise so the curves are not perfectly smooth.
+
+```{r data}
+library(unsurv)
+
+set.seed(2026)
+n <- 150
+Q <- 60
+times <- seq(0, 5, length.out = Q)
+
+group <- sample(1:3, n, TRUE, prob = c(0.35, 0.4, 0.25))
+haz   <- c(0.18, 0.45, 0.8)[group]
+
+S <- sapply(times, function(t) exp(-haz * t))
+S <- S + matrix(rnorm(n * Q, 0, 0.02), nrow = n)
+S[S < 0] <- 0; S[S > 1] <- 1
+```
+
+## Fit clustering with automatic K selection
+
+Leaving `K = NULL` lets **unsurv** pick the number of clusters using the mean silhouette over `2:K_max`.
+
+```{r fit}
+fit <- unsurv(S, times, K = NULL, K_max = 6, distance = "L2",
+              enforce_monotone = TRUE, smooth_median_width = 5,
+              standardize_cols = TRUE, eps_jitter = 0.0005)
+fit
+```
+
+Key slots:
+
+- `K`: chosen cluster count
+- `clusters`: assignments for each curve
+- `medoids`: representative survival curves
+- `silhouette_mean`: average silhouette width
+
+## Visualize medoids
+
+```{r medoids-plot, fig.cap = "Cluster medoid survival curves."}
+plot(fit)
+```
+
+For a ggplot2 version:
+
+```{r autoplot, fig.cap = "Medoid curves via ggplot2 autoplot."}
+library(ggplot2)
+autoplot(fit)
+```
+
+## Predict cluster membership for new curves
+
+New curves must use the same time grid as the fit. Preprocessing (clamping, monotonicity, smoothing, standardization) is reused automatically.
+
+```{r predict}
+new_curves <- S[1:5, ]
+predict(fit, new_curves)
+```
+
+## Stability assessment
+
+Resampling gives a sense of how stable the clustering is to perturbations.
+
+```{r stability}
+stab <- unsurv_stability(
+  S, times, fit,
+  B = 20, frac = 0.7,
+  mode = "subsample",
+  jitter_sd = 0.01,
+  weight_perturb = 0.05,
+  return_distribution = TRUE
+)
+stab$mean
+```
+
+```{r stability-plot, fig.cap = "Distribution of Adjusted Rand Index across resamples."}
+plot_stability(stab)
+```
+
+Higher mean ARI indicates more reproducible clusters.
+
+## Tips and troubleshooting
+
+- Ensure `times` is strictly increasing and matches the number of columns in `S`.
+- If curves show small upward wiggles, keep `enforce_monotone = TRUE` or increase `smooth_median_width` to an odd integer ≥ 3.
+- Use `distance = "L1"` when robustness to large deviations at a few time points is desired.
+- Setting `weights` lets you emphasize clinically important time windows; weights are normalized internally.
+
+## Reproducibility
+
+Set `seed` inside `unsurv()` for deterministic PAM initialization and silhouette selection. Vignette figures may differ slightly because of noise added to simulated curves.
