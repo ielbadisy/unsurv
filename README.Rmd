@@ -20,7 +20,7 @@ knitr::opts_chunk$set(
 
 <!-- R CMD check -->
 
-<!-- [![R-CMD-check](https://github.com/USERNAME/unsurv/actions/workflows/R-CMD-check.yaml/badge.svg)](https://github.com/USERNAME/unsurv/actions) -->
+<!-- [![R-CMD-check](https://github.com/ielbadisy/unsurv/actions/workflows/R-CMD-check.yaml/badge.svg)](https://github.com/ielbadisy/unsurv/actions) -->
 
 <!-- License -->
 
@@ -235,5 +235,4 @@ MIT License © Imad EL BADISY
 
 # Links
 
-GitHub: [https://github.com/USERNAME/unsurv](https://github.com/USERNAME/unsurv)
-
+GitHub: [https://github.com/ielbadisy/unsurv](https://github.com/ielbadisy/unsurv)
