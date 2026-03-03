@@ -59,6 +59,14 @@ Kaufman, L., & Rousseeuw, P. J. (1990).
 \emph{Finding Groups in Data: An Introduction to Cluster Analysis}.
 Wiley.
 }
+\seealso{
+Useful links:
+\itemize{
+  \item \url{https://github.com/ielbadisy/unsurv}
+  \item Report bugs at \url{https://github.com/ielbadisy/unsurv/issues}
+}
+
+}
 \author{
 Imad EL BADISY
 }

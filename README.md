@@ -7,7 +7,7 @@ unsurv: Unsupervised Clustering of Individualized Survival Curves
 <!-- CRAN status (activate after submission) -->
 <!-- [![CRAN status](https://www.r-pkg.org/badges/version/unsurv)](https://CRAN.R-project.org/package=unsurv) -->
 <!-- R CMD check -->
-<!-- [![R-CMD-check](https://github.com/USERNAME/unsurv/actions/workflows/R-CMD-check.yaml/badge.svg)](https://github.com/USERNAME/unsurv/actions) -->
+<!-- [![R-CMD-check](https://github.com/ielbadisy/unsurv/actions/workflows/R-CMD-check.yaml/badge.svg)](https://github.com/ielbadisy/unsurv/actions) -->
 <!-- License -->
 
 [![License:
@@ -206,18 +206,21 @@ If you use unsurv, please cite:
 
 ``` r
 citation("unsurv")
+#> Warning in citation("unsurv"): could not determine year for 'unsurv' from
+#> package DESCRIPTION file
 #> To cite package 'unsurv' in publications use:
 #> 
-#>   EL BADISY I (2026). _unsurv: Unsupervised Clustering of
-#>   Individualized Survival Curves_. R package version 0.1.0.
+#>   EL BADISY I (????). _unsurv: Unsupervised Clustering of
+#>   Individualized Survival Curves_. R package version 0.1.0,
+#>   <https://github.com/ielbadisy/unsurv>.
 #> 
 #> A BibTeX entry for LaTeX users is
 #> 
 #>   @Manual{,
 #>     title = {unsurv: Unsupervised Clustering of Individualized Survival Curves},
 #>     author = {Imad {EL BADISY}},
-#>     year = {2026},
 #>     note = {R package version 0.1.0},
+#>     url = {https://github.com/ielbadisy/unsurv},
 #>   }
 ```
 
@@ -235,4 +238,4 @@ MIT License © Imad EL BADISY
 
 # Links
 
-GitHub: <https://github.com/USERNAME/unsurv>
+GitHub: <https://github.com/ielbadisy/unsurv>
