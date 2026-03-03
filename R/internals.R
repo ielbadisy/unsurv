@@ -206,8 +206,16 @@ plot_surv_samples <- function(S, times, clusters = NULL, alpha = 0.2) {
 }
 
 
-#' Plot stability distribution (internal helper)
-#' @keywords internal
+#' Plot stability distribution
+#'
+#' Convenience helper to visualize the distribution of Adjusted Rand Index
+#' values returned by `unsurv_stability(...)` when `return_distribution = TRUE`.
+#'
+#' @param stab Either the numeric vector of ARI values or the list returned by
+#'   `unsurv_stability(..., return_distribution = TRUE)`.
+#'
+#' @return A `ggplot` histogram with a dashed line at the mean ARI.
+#' @export
 plot_stability <- function(stab) {
   if (!requireNamespace("ggplot2", quietly = TRUE)) stop("Install 'ggplot2'.", call. = FALSE)
 

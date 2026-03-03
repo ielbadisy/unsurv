@@ -2,11 +2,18 @@
 % Please edit documentation in R/internals.R
 \name{plot_stability}
 \alias{plot_stability}
-\title{Plot stability distribution (internal helper)}
+\title{Plot stability distribution}
 \usage{
 plot_stability(stab)
 }
-\description{
-Plot stability distribution (internal helper)
+\arguments{
+\item{stab}{Either the numeric vector of ARI values or the list returned by
+\code{unsurv_stability(..., return_distribution = TRUE)}.}
 }
-\keyword{internal}
+\value{
+A \code{ggplot} histogram with a dashed line at the mean ARI.
+}
+\description{
+Convenience helper to visualize the distribution of Adjusted Rand Index
+values returned by \code{unsurv_stability(...)} when \code{return_distribution = TRUE}.
+}
