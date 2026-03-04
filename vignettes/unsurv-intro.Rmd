@@ -37,7 +37,8 @@ haz   <- c(0.18, 0.45, 0.8)[group]
 
 S <- sapply(times, function(t) exp(-haz * t))
 S <- S + matrix(rnorm(n * Q, 0, 0.02), nrow = n)
-S[S < 0] <- 0; S[S > 1] <- 1
+S[S < 0] <- 0
+S[S > 1] <- 1
 ```
 
 ## Fit clustering with automatic K selection
@@ -92,12 +93,8 @@ stab <- unsurv_stability(
   jitter_sd = 0.01,
   weight_perturb = 0.05,
   return_distribution = TRUE
-)
+  )
 stab$mean
-```
-
-```{r stability-plot, fig.cap = "Distribution of Adjusted Rand Index across resamples."}
-plot_stability(stab)
 ```
 
 Higher mean ARI indicates more reproducible clusters.
@@ -107,7 +104,7 @@ Higher mean ARI indicates more reproducible clusters.
 - Ensure `times` is strictly increasing and matches the number of columns in `S`.
 - If curves show small upward wiggles, keep `enforce_monotone = TRUE` or increase `smooth_median_width` to an odd integer ≥ 3.
 - Use `distance = "L1"` when robustness to large deviations at a few time points is desired.
-- Setting `weights` lets you emphasize clinically important time windows; weights are normalized internally.
+- Setting `weights` lets you emphasize clinically important time windows. Weights are normalized internally.
 
 ## Reproducibility
 
