@@ -168,6 +168,15 @@ pred <- predict(fit, new_S)
 stab <- unsurv_stability(S, times, fit)
 ```
 
+# Vignette
+
+A full walkthrough (simulation, fitting, visualization, prediction,
+stability) is available in the vignette:
+
+``` r
+vignette("unsurv-intro", package = "unsurv")
+```
+
 # Applications
 
 **unsurv** is useful for:
@@ -206,21 +215,18 @@ If you use unsurv, please cite:
 
 ``` r
 citation("unsurv")
-#> Warning in citation("unsurv"): could not determine year for 'unsurv' from
-#> package DESCRIPTION file
 #> To cite package 'unsurv' in publications use:
 #> 
-#>   EL BADISY I (????). _unsurv: Unsupervised Clustering of
-#>   Individualized Survival Curves_. R package version 0.1.0,
-#>   <https://github.com/ielbadisy/unsurv>.
+#>   EL BADISY I (2026). _unsurv: Unsupervised Clustering of
+#>   Individualized Survival Curves_. R package version 0.1.0.
 #> 
 #> A BibTeX entry for LaTeX users is
 #> 
 #>   @Manual{,
 #>     title = {unsurv: Unsupervised Clustering of Individualized Survival Curves},
 #>     author = {Imad {EL BADISY}},
+#>     year = {2026},
 #>     note = {R package version 0.1.0},
-#>     url = {https://github.com/ielbadisy/unsurv},
 #>   }
 ```
 

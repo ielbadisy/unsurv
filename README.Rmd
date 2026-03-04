@@ -176,6 +176,14 @@ pred <- predict(fit, new_S)
 stab <- unsurv_stability(S, times, fit)
 ```
 
+# Vignette
+
+A full walkthrough (simulation, fitting, visualization, prediction, stability) is available in the vignette:
+
+``` r
+vignette("unsurv-intro", package = "unsurv")
+```
+
 
 # Applications
 

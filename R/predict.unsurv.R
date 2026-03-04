@@ -54,6 +54,10 @@ predict.unsurv <- function(object, newdata, clamp = TRUE, ...) {
     )
   }
 
+  if (any(!is.finite(S_new))) {
+    stop("newdata contains non-finite values.", call. = FALSE)
+  }
+
   # preprocessing identical to fitting
   if (isTRUE(clamp)) {
     S_new <- .clamp01(S_new)
