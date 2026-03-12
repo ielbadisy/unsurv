@@ -1,11 +1,11 @@
 Package: unsurv
 Title: Unsupervised Clustering of Individualized Survival Curves
-Version: 0.1.0
+Version: 0.5.0
 Authors@R: c(
     person("Imad", "EL BADISY", email = "elbadisyimad@gmail.com", role = c("aut", "cre")))
 Author: Imad EL BADISY [aut, cre]
 Maintainer: Imad EL BADISY <elbadisyimad@gmail.com>
-Date: 2026-03-03
+Date: 2026-03-12
 Description: Tools for clustering individualized survival curves using the
     Partitioning Around Medoids (PAM) algorithm, with monotonic enforcement,
     optional smoothing, weighted distances (L1/L2), automatic K selection via

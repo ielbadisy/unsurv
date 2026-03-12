@@ -218,7 +218,7 @@ citation("unsurv")
 #> To cite package 'unsurv' in publications use:
 #> 
 #>   EL BADISY I (2026). _unsurv: Unsupervised Clustering of
-#>   Individualized Survival Curves_. R package version 0.1.0.
+#>   Individualized Survival Curves_. R package version 0.5.0.
 #> 
 #> A BibTeX entry for LaTeX users is
 #> 
@@ -226,7 +226,7 @@ citation("unsurv")
 #>     title = {unsurv: Unsupervised Clustering of Individualized Survival Curves},
 #>     author = {Imad {EL BADISY}},
 #>     year = {2026},
-#>     note = {R package version 0.1.0},
+#>     note = {R package version 0.5.0},
 #>   }
 ```
 
