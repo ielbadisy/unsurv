@@ -17,3 +17,15 @@ A \code{ggplot} histogram with a dashed line at the mean ARI.
 Convenience helper to visualize the distribution of Adjusted Rand Index
 values returned by \code{unsurv_stability(...)} when \code{return_distribution = TRUE}.
 }
+\examples{
+if (requireNamespace("cluster", quietly = TRUE)) {
+  set.seed(1)
+  times <- seq(0, 4, length.out = 25)
+  grp <- rep(1:2, each = 10)
+  rates <- c(0.2, 0.55)
+  S <- sapply(times, function(t) exp(-rates[grp] * t))
+  fit <- unsurv(S, times, K = 2)
+  stab <- unsurv_stability(S, times, fit, B = 6, frac = 0.7)
+  plot_stability(stab)
+}
+}

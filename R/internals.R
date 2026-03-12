@@ -215,6 +215,18 @@ plot_surv_samples <- function(S, times, clusters = NULL, alpha = 0.2) {
 #'   `unsurv_stability(..., return_distribution = TRUE)`.
 #'
 #' @return A `ggplot` histogram with a dashed line at the mean ARI.
+#'
+#' @examples
+#' if (requireNamespace("cluster", quietly = TRUE)) {
+#'   set.seed(1)
+#'   times <- seq(0, 4, length.out = 25)
+#'   grp <- rep(1:2, each = 10)
+#'   rates <- c(0.2, 0.55)
+#'   S <- sapply(times, function(t) exp(-rates[grp] * t))
+#'   fit <- unsurv(S, times, K = 2)
+#'   stab <- unsurv_stability(S, times, fit, B = 6, frac = 0.7)
+#'   plot_stability(stab)
+#' }
 #' @export
 plot_stability <- function(stab) {
   if (!requireNamespace("ggplot2", quietly = TRUE)) stop("Install 'ggplot2'.", call. = FALSE)
@@ -245,6 +257,17 @@ plot_stability <- function(stab) {
 #' @param ... Unused.
 #'
 #' @return A ggplot object.
+#'
+#' @examples
+#' if (requireNamespace("cluster", quietly = TRUE)) {
+#'   set.seed(1)
+#'   times <- seq(0, 4, length.out = 25)
+#'   grp <- rep(1:2, each = 10)
+#'   rates <- c(0.2, 0.55)
+#'   S <- sapply(times, function(t) exp(-rates[grp] * t))
+#'   fit <- unsurv(S, times, K = 2)
+#'   ggplot2::autoplot(fit)
+#' }
 #'
 #' @export
 #' @method autoplot unsurv

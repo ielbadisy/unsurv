@@ -63,7 +63,6 @@ Wiley.
 Useful links:
 \itemize{
   \item \url{https://github.com/ielbadisy/unsurv}
-  \item \url{https://ielbadisy.github.io/unsurv}
   \item Report bugs at \url{https://github.com/ielbadisy/unsurv/issues}
 }
 

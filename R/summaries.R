@@ -4,6 +4,17 @@
 #' @param ... Unused.
 #'
 #' @return Invisibly returns \code{x}.
+#'
+#' @examples
+#' if (requireNamespace("cluster", quietly = TRUE)) {
+#'   set.seed(1)
+#'   times <- seq(0, 4, length.out = 20)
+#'   grp <- rep(1:2, each = 6)
+#'   rates <- c(0.2, 0.6)
+#'   S <- sapply(times, function(t) exp(-rates[grp] * t))
+#'   fit <- unsurv(S, times, K = 2)
+#'   print(fit)
+#' }
 #' @export
 print.unsurv <- function(x, ...) {
   cat("unsurv (PAM) fit\n",
@@ -26,6 +37,17 @@ print.unsurv <- function(x, ...) {
 #'     \item \code{silhouette_mean}: mean silhouette width
 #'     \item \code{size}: cluster sizes
 #'   }
+#'
+#' @examples
+#' if (requireNamespace("cluster", quietly = TRUE)) {
+#'   set.seed(1)
+#'   times <- seq(0, 4, length.out = 20)
+#'   grp <- rep(1:2, each = 6)
+#'   rates <- c(0.2, 0.6)
+#'   S <- sapply(times, function(t) exp(-rates[grp] * t))
+#'   fit <- unsurv(S, times, K = 2)
+#'   summary(fit)
+#' }
 #' @export
 summary.unsurv <- function(object, ...) {
   out <- list(
@@ -43,6 +65,18 @@ summary.unsurv <- function(object, ...) {
 #' @param ... Unused.
 #'
 #' @return Invisibly returns \code{x}.
+#'
+#' @examples
+#' if (requireNamespace("cluster", quietly = TRUE)) {
+#'   set.seed(1)
+#'   times <- seq(0, 4, length.out = 20)
+#'   grp <- rep(1:2, each = 6)
+#'   rates <- c(0.2, 0.6)
+#'   S <- sapply(times, function(t) exp(-rates[grp] * t))
+#'   fit <- unsurv(S, times, K = 2)
+#'   s <- summary(fit)
+#'   print(s)
+#' }
 #' @export
 print.summary.unsurv <- function(x, ...) {
   cat("K:\n"); print(x$K)
@@ -80,7 +114,7 @@ print.summary.unsurv <- function(x, ...) {
 #' @examples
 #' if (requireNamespace("cluster", quietly = TRUE)) {
 #'   set.seed(2025)
-#'   n <- 120; Q <- 60
+#'   n <- 60; Q <- 40
 #'   times <- seq(0, 5, length.out = Q)
 #'   rates <- c(0.12, 0.38, 0.8)
 #'   grp <- sample(1:3, n, TRUE, c(0.4, 0.4, 0.2))
@@ -93,7 +127,7 @@ print.summary.unsurv <- function(x, ...) {
 #'                enforce_monotone = TRUE, standardize_cols = FALSE,
 #'                eps_jitter = 0, seed = NULL)
 #'
-#'   stab <- unsurv_stability(S, times, fit, B = 30, frac = 0.55, mode = "bootstrap",
+#'   stab <- unsurv_stability(S, times, fit, B = 8, frac = 0.55, mode = "bootstrap",
 #'                            jitter_sd = 0.3, weight_perturb = 0.0, eps_jitter = 0.3,
 #'                            return_distribution = TRUE)
 #'   stab$mean

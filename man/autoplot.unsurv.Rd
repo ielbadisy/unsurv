@@ -17,3 +17,15 @@ A ggplot object.
 \description{
 ggplot2 autoplot for unsurv objects
 }
+\examples{
+if (requireNamespace("cluster", quietly = TRUE)) {
+  set.seed(1)
+  times <- seq(0, 4, length.out = 25)
+  grp <- rep(1:2, each = 10)
+  rates <- c(0.2, 0.55)
+  S <- sapply(times, function(t) exp(-rates[grp] * t))
+  fit <- unsurv(S, times, K = 2)
+  ggplot2::autoplot(fit)
+}
+
+}

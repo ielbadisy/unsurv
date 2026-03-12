@@ -96,7 +96,7 @@ Requires the \pkg{cluster} package (recommended in \code{Suggests}).
 \examples{
 if (requireNamespace("cluster", quietly = TRUE)) {
   set.seed(2025)
-  n <- 120; Q <- 60
+  n <- 40; Q <- 30
   times <- seq(0, 5, length.out = Q)
   rates <- c(0.12, 0.38, 0.8)
   grp <- sample(1:3, n, TRUE, c(0.4, 0.4, 0.2))
@@ -117,8 +117,8 @@ if (requireNamespace("cluster", quietly = TRUE)) {
 }
 if (requireNamespace("cluster", quietly = TRUE)) {
   set.seed(1)
-  n <- 80
-  times <- seq(0, 5, length.out = 60)
+  n <- 40
+  times <- seq(0, 5, length.out = 30)
   grp <- sample(1:2, n, TRUE)
   rates <- ifelse(grp == 1, 0.2, 0.6)
   S <- sapply(times, function(t) exp(-rates * t))

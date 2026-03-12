@@ -48,7 +48,7 @@
 #' @examples
 #' if (requireNamespace("cluster", quietly = TRUE)) {
 #'   set.seed(2025)
-#'   n <- 120; Q <- 60
+#'   n <- 40; Q <- 30
 #'   times <- seq(0, 5, length.out = Q)
 #'   rates <- c(0.12, 0.38, 0.8)
 #'   grp <- sample(1:3, n, TRUE, c(0.4, 0.4, 0.2))
@@ -178,6 +178,17 @@ unsurv <- function(
 #'   (e.g., \code{lwd}).
 #'
 #' @return Invisibly returns \code{x}.
+#'
+#' @examples
+#' if (requireNamespace("cluster", quietly = TRUE)) {
+#'   set.seed(1)
+#'   times <- seq(0, 4, length.out = 30)
+#'   grp <- rep(1:2, each = 8)
+#'   rates <- c(0.2, 0.55)
+#'   S <- sapply(times, function(t) exp(-rates[grp] * t))
+#'   fit <- unsurv(S, times, K = 2)
+#'   plot(fit)
+#' }
 #' @export
 plot.unsurv <- function(x, ...) {
   stopifnot(inherits(x, "unsurv"))

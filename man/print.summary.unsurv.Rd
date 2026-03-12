@@ -17,3 +17,15 @@ Invisibly returns \code{x}.
 \description{
 Print a summary of an unsurv model
 }
+\examples{
+if (requireNamespace("cluster", quietly = TRUE)) {
+  set.seed(1)
+  times <- seq(0, 4, length.out = 20)
+  grp <- rep(1:2, each = 6)
+  rates <- c(0.2, 0.6)
+  S <- sapply(times, function(t) exp(-rates[grp] * t))
+  fit <- unsurv(S, times, K = 2)
+  s <- summary(fit)
+  print(s)
+}
+}

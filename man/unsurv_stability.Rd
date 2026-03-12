@@ -56,7 +56,7 @@ using the Adjusted Rand Index (ARI) computed on overlap sets across resamples.
 \examples{
 if (requireNamespace("cluster", quietly = TRUE)) {
   set.seed(2025)
-  n <- 120; Q <- 60
+  n <- 60; Q <- 40
   times <- seq(0, 5, length.out = Q)
   rates <- c(0.12, 0.38, 0.8)
   grp <- sample(1:3, n, TRUE, c(0.4, 0.4, 0.2))
@@ -69,7 +69,7 @@ if (requireNamespace("cluster", quietly = TRUE)) {
                enforce_monotone = TRUE, standardize_cols = FALSE,
                eps_jitter = 0, seed = NULL)
 
-  stab <- unsurv_stability(S, times, fit, B = 30, frac = 0.55, mode = "bootstrap",
+  stab <- unsurv_stability(S, times, fit, B = 8, frac = 0.55, mode = "bootstrap",
                            jitter_sd = 0.3, weight_perturb = 0.0, eps_jitter = 0.3,
                            return_distribution = TRUE)
   stab$mean

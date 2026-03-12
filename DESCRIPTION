@@ -1,16 +1,19 @@
 Package: unsurv
 Title: Unsupervised Clustering of Individualized Survival Curves
-Version: 0.1.0
+Version: 0.5.0
 Authors@R: c(
     person("Imad", "EL BADISY", email = "elbadisyimad@gmail.com", role = c("aut", "cre")))
 Author: Imad EL BADISY [aut, cre]
 Maintainer: Imad EL BADISY <elbadisyimad@gmail.com>
-Date: 2026-03-03
-Description: Tools for clustering individualized survival curves using medoid-based (PAM) algorithm,
-    with monotonic enforcement, optional smoothing, weighted distances (L1/L2), automatic K selection
-    via silhouette, prediction for new curves, basic stability checks, and plotting helpers.
+Date: 2026-03-12
+Description: Tools for clustering individualized survival curves using the
+    Partitioning Around Medoids (PAM) algorithm, with monotonic enforcement,
+    optional smoothing, weighted distances (L1/L2), automatic K selection via
+    silhouette width, prediction for new curves, basic stability checks, and
+    plotting helpers. The clustering strategy follows Kaufman and Rousseeuw
+    (1990, ISBN:0471878766).
 License: MIT + file LICENSE
-URL: https://github.com/ielbadisy/unsurv, https://ielbadisy.github.io/unsurv
+URL: https://github.com/ielbadisy/unsurv
 BugReports: https://github.com/ielbadisy/unsurv/issues
 Encoding: UTF-8
 Roxygen: list(markdown = TRUE)
@@ -26,7 +29,6 @@ Suggests:
     scales,
     testthat (>= 3.0.0),
     knitr,
-    rmarkdown,
-    pkgdown
+    rmarkdown
 VignetteBuilder: knitr
 Config/testthat/edition: 3
