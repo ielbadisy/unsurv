@@ -6,9 +6,6 @@ LICENSE\.md$
 README\.Rmd$
 ^README_files
 ^\.github
-^_pkgdown\.yml$
-^docs$
-^pkgdown$
 ^vignettes/.*\.html$
 ^doc$
 ^Meta$
@@ -16,3 +13,4 @@ README\.Rmd$
 ^build/
 ^cran-comments\.md$
 ^CRAN-SUBMISSION$
+^unsurv_0\.1\.0$

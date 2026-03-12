@@ -19,3 +19,14 @@ Invisibly returns \code{x}.
 Produces a base R plot of the cluster medoid survival curves stored in the
 fitted object.
 }
+\examples{
+if (requireNamespace("cluster", quietly = TRUE)) {
+  set.seed(1)
+  times <- seq(0, 4, length.out = 30)
+  grp <- rep(1:2, each = 8)
+  rates <- c(0.2, 0.55)
+  S <- sapply(times, function(t) exp(-rates[grp] * t))
+  fit <- unsurv(S, times, K = 2)
+  plot(fit)
+}
+}

@@ -29,8 +29,8 @@
 #' @examples
 #' if (requireNamespace("cluster", quietly = TRUE)) {
 #'   set.seed(1)
-#'   n <- 80
-#'   times <- seq(0, 5, length.out = 60)
+#'   n <- 40
+#'   times <- seq(0, 5, length.out = 30)
 #'   grp <- sample(1:2, n, TRUE)
 #'   rates <- ifelse(grp == 1, 0.2, 0.6)
 #'   S <- sapply(times, function(t) exp(-rates * t))

@@ -11,3 +11,4 @@
 # build artifacts
 *.Rcheck/
 *.tar.gz
+/unsurv_0.1.0/
