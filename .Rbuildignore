@@ -10,7 +10,6 @@ README\.Rmd$
 ^doc$
 ^Meta$
 ^\.quarto/
-^build/
 ^cran-comments\.md$
 ^CRAN-SUBMISSION$
 ^unsurv_0\.1\.0$
