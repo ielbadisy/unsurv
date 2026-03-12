@@ -13,19 +13,12 @@ knitr::opts_chunk$set(
 # unsurv
 
 <!-- badges: start -->
-
 <!-- CRAN status (activate after submission) -->
-
 <!-- [![CRAN status](https://www.r-pkg.org/badges/version/unsurv)](https://CRAN.R-project.org/package=unsurv) -->
-
 <!-- R CMD check -->
-
 <!-- [![R-CMD-check](https://github.com/ielbadisy/unsurv/actions/workflows/R-CMD-check.yaml/badge.svg)](https://github.com/ielbadisy/unsurv/actions) -->
-
 <!-- License -->
-
 [![License: MIT](https://img.shields.io/badge/license-MIT-blue.svg)](LICENSE)
-
 <!-- badges: end -->
 
 `unsurv` provides tools for *unsupervised clustering of individualized survival curves* using a medoid-based (PAM) algorithm. It is designed for applications where each observation is represented by a full survival probability trajectory over time, such as:
@@ -43,7 +36,6 @@ The package provides:
 * Prediction of cluster membership for new curves
 * Stability assessment via resampling and Adjusted Rand Index
 * Visualization tools
-
 
 # Installation
 
@@ -224,20 +216,6 @@ If you use unsurv, please cite:
 ```{r}
 citation("unsurv")
 ```
-
-
-# Development status
-
-- Stable core implementation
-
-- Full test suite
-
-- CRAN submission ready
-
-
-# Links
-
-GitHub: [https://github.com/ielbadisy/unsurv](https://github.com/ielbadisy/unsurv)
 
 
 # License

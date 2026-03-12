@@ -13,3 +13,4 @@ README\.Rmd$
 ^cran-comments\.md$
 ^CRAN-SUBMISSION$
 ^unsurv_0\.1\.0$
+^\.Rproj\.user$

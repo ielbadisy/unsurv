@@ -9,10 +9,8 @@ unsurv: Unsupervised Clustering of Individualized Survival Curves
 <!-- R CMD check -->
 <!-- [![R-CMD-check](https://github.com/ielbadisy/unsurv/actions/workflows/R-CMD-check.yaml/badge.svg)](https://github.com/ielbadisy/unsurv/actions) -->
 <!-- License -->
-
 [![License:
 MIT](https://img.shields.io/badge/license-MIT-blue.svg)](LICENSE)
-
 <!-- badges: end -->
 
 `unsurv` provides tools for *unsupervised clustering of individualized
@@ -229,18 +227,6 @@ citation("unsurv")
 #>     note = {R package version 0.1.0},
 #>   }
 ```
-
-# Development status
-
-- Stable core implementation
-
-- Full test suite
-
-- CRAN submission ready
-
-# Links
-
-GitHub: <https://github.com/ielbadisy/unsurv>
 
 # License
 
