@@ -60,7 +60,6 @@ remotes::install_github("ielbadisy/unsurv")
 install.packages("unsurv")
 ```
 
-
 # Overview
 
 The core function is:
@@ -227,11 +226,6 @@ citation("unsurv")
 ```
 
 
-# License
-
-MIT License © Imad EL BADISY
-
-
 # Development status
 
 - Stable core implementation
@@ -244,3 +238,8 @@ MIT License © Imad EL BADISY
 # Links
 
 GitHub: [https://github.com/ielbadisy/unsurv](https://github.com/ielbadisy/unsurv)
+
+
+# License
+
+MIT License © Imad EL BADISY
