@@ -5,7 +5,7 @@ Authors@R: c(
     person("Imad", "El Badisy", email = "elbadisyimad@gmail.com", role = c("aut", "cre")))
 Author: Imad El Badisy [aut, cre]
 Maintainer: Imad El Badisy <elbadisyimad@gmail.com>
-Date: 2026-08-30
+Date: 2026-08-31
 Description: Tools for clustering individualized survival curves using the
     Partitioning Around Medoids (PAM) algorithm, with monotonic enforcement,
     optional smoothing, weighted distances (L1/L2), automatic K selection via
