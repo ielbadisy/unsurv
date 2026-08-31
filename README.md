@@ -9,6 +9,7 @@ unsurv: Unsupervised Clustering of Individualized Survival Curves
 <!-- R CMD check -->
 <!-- [![R-CMD-check](https://github.com/ielbadisy/unsurv/actions/workflows/R-CMD-check.yaml/badge.svg)](https://github.com/ielbadisy/unsurv/actions) -->
 <!-- License -->
+
 [![License:
 MIT](https://img.shields.io/badge/license-MIT-blue.svg)](LICENSE)
 <!-- badges: end -->
@@ -30,6 +31,8 @@ The package provides:
 - Support for weighted L1 and L2 distances
 - Prediction of cluster membership for new curves
 - Stability assessment via resampling and Adjusted Rand Index
+- Comparison of a curve-based partition against baseline partitions
+  (scalar risk, covariate PCA) using `unsurv_compare()`
 - Visualization tools
 
 # Installation
@@ -168,8 +171,9 @@ stab <- unsurv_stability(S, times, fit)
 
 # Vignette
 
-A full walkthrough (simulation, fitting, visualization, prediction,
-stability) is available in the vignette:
+A full walkthrough (simulated mechanics plus the paper’s METABRIC worked
+example with deep-learning survival predictions) is available in the
+vignette:
 
 ``` r
 vignette("unsurv-intro", package = "unsurv")
@@ -198,14 +202,15 @@ function itself**, enabling:
 
 Core functions:
 
-| Function         | Description          |
-|------------------|----------------------|
-| unsurv           | fit clustering model |
-| predict          | assign new curves    |
-| plot             | visualize medoids    |
-| summary          | summarize clustering |
-| unsurv_stability | evaluate stability   |
-| autoplot         | ggplot visualization |
+| Function         | Description                     |
+|------------------|---------------------------------|
+| unsurv           | fit clustering model            |
+| predict          | assign new curves               |
+| plot             | visualize medoids               |
+| summary          | summarize clustering            |
+| unsurv_stability | evaluate stability              |
+| unsurv_compare   | compare partitions vs. outcomes |
+| autoplot         | ggplot visualization            |
 
 # Citation
 
@@ -215,19 +220,25 @@ If you use unsurv, please cite:
 citation("unsurv")
 #> To cite package 'unsurv' in publications use:
 #> 
-#>   EL BADISY I (2026). _unsurv: Unsupervised Clustering of
-#>   Individualized Survival Curves_. R package version 0.1.0.
+#>   El Badisy I (2026). "unsurv: clustering individualized survival
+#>   curves." _Bioinformatics Advances_, *6*(1), vbag218.
+#>   doi:10.1093/bioadv/vbag218 <https://doi.org/10.1093/bioadv/vbag218>.
 #> 
 #> A BibTeX entry for LaTeX users is
 #> 
-#>   @Manual{,
-#>     title = {unsurv: Unsupervised Clustering of Individualized Survival Curves},
-#>     author = {Imad {EL BADISY}},
+#>   @Article{,
+#>     title = {unsurv: clustering individualized survival curves},
+#>     author = {Imad {El Badisy}},
+#>     journal = {Bioinformatics Advances},
 #>     year = {2026},
-#>     note = {R package version 0.1.0},
+#>     volume = {6},
+#>     number = {1},
+#>     pages = {vbag218},
+#>     doi = {10.1093/bioadv/vbag218},
+#>     publisher = {Oxford University Press},
 #>   }
 ```
 
 # License
 
-MIT License © Imad EL BADISY
+MIT License © Imad El Badisy

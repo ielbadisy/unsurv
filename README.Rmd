@@ -35,6 +35,7 @@ The package provides:
 * Support for weighted L1 and L2 distances
 * Prediction of cluster membership for new curves
 * Stability assessment via resampling and Adjusted Rand Index
+* Comparison of a curve-based partition against baseline partitions (scalar risk, covariate PCA) using `unsurv_compare()`
 * Visualization tools
 
 # Installation
@@ -169,7 +170,7 @@ stab <- unsurv_stability(S, times, fit)
 
 # Vignette
 
-A full walkthrough (simulation, fitting, visualization, prediction, stability) is available in the vignette:
+A full walkthrough (simulated mechanics plus the paper's METABRIC worked example with deep-learning survival predictions) is available in the vignette:
 
 ``` r
 vignette("unsurv-intro", package = "unsurv")
@@ -201,12 +202,13 @@ Core functions:
 
 | Function         | Description          |
 | ---------------- | -------------------- |
-| unsurv           | fit clustering model |
-| predict          | assign new curves    |
-| plot             | visualize medoids    |
-| summary          | summarize clustering |
-| unsurv_stability | evaluate stability   |
-| autoplot         | ggplot visualization |
+| unsurv           | fit clustering model               |
+| predict          | assign new curves                  |
+| plot             | visualize medoids                  |
+| summary          | summarize clustering               |
+| unsurv_stability | evaluate stability                 |
+| unsurv_compare   | compare partitions vs. outcomes    |
+| autoplot         | ggplot visualization               |
 
 
 # Citation
@@ -220,4 +222,4 @@ citation("unsurv")
 
 # License
 
-MIT License © Imad EL BADISY
+MIT License © Imad El Badisy
