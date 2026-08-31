@@ -4,5 +4,8 @@ utils::globalVariables(c(
   "cluster",
   "gid",
   "id",
-  "ARI"
+  "ARI",
+  "time",
+  "survival",
+  "method"
 ))

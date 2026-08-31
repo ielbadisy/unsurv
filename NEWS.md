@@ -1,3 +1,13 @@
+unsurv 0.6.0 (2026-07-22)
+-------------------------
+- Added `unsurv_compare()` to summarize and compare multiple cluster partitions
+  (e.g., an `unsurv` curve-based partition against scalar-risk or covariate-PCA
+  baselines) against observed survival outcomes, reporting cluster-size balance,
+  Adjusted Rand Index agreement against a reference partition, and per-cluster
+  Kaplan-Meier medians.
+- Added `autoplot()`/`plot()` methods for `"unsurv_compare"` objects, producing
+  Kaplan-Meier curves faceted by comparison method.
+
 unsurv 0.5.0 (2026-03-12)
 -------------------------
 - Added introductory vignette covering fitting, visualization, prediction, and stability checks.
