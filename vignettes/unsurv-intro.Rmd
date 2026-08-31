@@ -1,6 +1,6 @@
 ---
 title: "Clustering Individualized Survival Curves with unsurv"
-author: "Imad EL BADISY"
+author: "Imad El Badisy"
 date: "`r format(Sys.Date())`"
 output: rmarkdown::html_vignette
 vignette: >
@@ -16,84 +16,215 @@ knitr::opts_chunk$set(
   fig.width = 7,
   fig.height = 4.5
 )
+has_survival <- requireNamespace("survival", quietly = TRUE)
 ```
 
-The **unsurv** package clusters full survival trajectories rather than baseline covariates. This vignette walks through a minimal workflow: simulate curves, fit the model, choose the number of clusters automatically, predict new samples, and assess stability.
+**unsurv** clusters full predicted survival trajectories rather than baseline
+covariates or a single risk score. Each observation is one survival
+probability curve on a shared time grid, and the package groups patients whose
+whole predicted trajectory has the same shape.
 
-## Simulate individualized survival curves
+This vignette has two parts:
 
-We create three prognosis groups with different exponential hazards and add noise so the curves are not perfectly smooth.
+1. a minimal simulated example that shows the mechanics of `unsurv()`, `plot()`,
+   `predict()`, and `unsurv_stability()`;
+2. the worked example from the accompanying paper --- clustering deep-learning
+   survival predictions for the METABRIC breast-cancer cohort --- run from a
+   small set of predicted curves shipped with the package.
 
-```{r data}
+## 1. Mechanics on a simulated example
+
+Three prognosis groups with different exponential hazards, plus a little noise
+so the curves are not perfectly smooth.
+
+```{r sim-data}
 library(unsurv)
 
 set.seed(2026)
 n <- 150
 Q <- 60
-times <- seq(0, 5, length.out = Q)
+sim_times <- seq(0, 5, length.out = Q)
 
 group <- sample(1:3, n, TRUE, prob = c(0.35, 0.4, 0.25))
 haz   <- c(0.18, 0.45, 0.8)[group]
 
-S <- sapply(times, function(t) exp(-haz * t))
+S <- sapply(sim_times, function(t) exp(-haz * t))
 S <- S + matrix(rnorm(n * Q, 0, 0.02), nrow = n)
 S[S < 0] <- 0
 S[S > 1] <- 1
 ```
 
-## Fit clustering with automatic K selection
+Leaving `K = NULL` lets **unsurv** choose the number of clusters by the mean
+silhouette width over `2:K_max`.
 
-Leaving `K = NULL` lets **unsurv** pick the number of clusters using the mean silhouette over `2:K_max`.
+```{r sim-fit}
+sim_fit <- unsurv(S, sim_times, K = NULL, K_max = 6, distance = "L2",
+                  enforce_monotone = TRUE, smooth_median_width = 5,
+                  standardize_cols = TRUE, eps_jitter = 0.0005, seed = 1)
+sim_fit
+```
 
-```{r fit}
-fit <- unsurv(S, times, K = NULL, K_max = 6, distance = "L2",
-              enforce_monotone = TRUE, smooth_median_width = 5,
-              standardize_cols = TRUE, eps_jitter = 0.0005)
+Key slots: `K` (chosen cluster count), `clusters` (assignment per curve),
+`medoids` (representative curves), `silhouette_mean`.
+
+```{r sim-plot, fig.cap = "Cluster medoid survival curves (simulated data)."}
+plot(sim_fit)
+```
+
+New curves must be on the same time grid; the fitted preprocessing (clamping,
+monotonicity, smoothing, standardization) is reused automatically.
+
+```{r sim-predict}
+predict(sim_fit, S[1:5, ])
+```
+
+## 2. Worked example: METABRIC predicted curves (from the paper)
+
+### Where the data come from
+
+The file `extdata/metabric_survdnn_curves.rds` reproduces the worked example in
+
+> El Badisy I (2026). "unsurv: clustering individualized survival curves."
+> *Bioinformatics Advances*, **6**(1), vbag218.
+> <doi:10.1093/bioadv/vbag218>
+
+It was produced by `data-raw/metabric_survdnn_curves.R` with the same pipeline
+as the paper's scripts:
+
+* the METABRIC cohort from the **biostatlab** package, overall survival in
+  months as the outcome;
+* a single 60/20/20 split (seed `20260615`) into train / partition / validation;
+* a deep accelerated-failure-time survival network (**survdnn**, `loss = "aft"`)
+  fitted on the *training* patients only;
+* predicted survival probabilities on a 100-point time grid (from the first
+  event time to the 90th percentile of the training follow-up) for the
+  *partition* and *validation* patients.
+
+The shipped object contains **only** model-predicted probabilities and the
+`(time, status)` pair for each patient --- no METABRIC covariates or patient
+identifiers --- so the vignette reproduces the paper figure without importing
+`survdnn`, `biostatlab`, or `torch` at build time. Regenerate it by running
+`data-raw/metabric_survdnn_curves.R` from the package root.
+
+```{r metabric-load}
+f <- system.file("extdata", "metabric_survdnn_curves.rds", package = "unsurv")
+mb <- readRDS(f)
+
+str(mb, max.level = 1)
+cat(mb$provenance)
+```
+
+`mb$S_partition` is a 367 x 100 matrix of predicted survival probabilities
+(one row per patient), `mb$times` the shared time grid in months, and
+`mb$os_time` / `mb$os_event` the observed outcomes for each set.
+
+### Cluster the predicted curves
+
+Following the paper, we fix `K = 3` and cluster the partition-set curves.
+
+```{r metabric-fit}
+fit <- unsurv(mb$S_partition, mb$times, K = 3, distance = "L2",
+              enforce_monotone = TRUE, smooth_median_width = 3,
+              standardize_cols = FALSE, eps_jitter = 0, seed = 20260615)
 fit
 ```
 
-Key slots:
-
-- `K`: chosen cluster count
-- `clusters`: assignments for each curve
-- `medoids`: representative survival curves
-- `silhouette_mean`: average silhouette width
-
-## Visualize medoids
-
-```{r medoids-plot, fig.cap = "Cluster medoid survival curves."}
-plot(fit)
-```
-
-For a ggplot2 version:
-
-```{r autoplot, fig.cap = "Medoid curves via ggplot2 autoplot."}
+```{r metabric-medoids, fig.cap = "Predicted survival curves coloured by unsurv cluster, with medoid prototypes (thick lines).", eval = has_survival}
 library(ggplot2)
-autoplot(fit)
+
+grid_n  <- length(mb$times)
+curf <- data.frame(
+  id       = rep(seq_len(nrow(mb$S_partition)), each = grid_n),
+  time     = rep(mb$times, times = nrow(mb$S_partition)),
+  survival = as.vector(t(mb$S_partition)),
+  cluster  = factor(rep(fit$clusters, each = grid_n))
+)
+medf <- data.frame(
+  time     = rep(mb$times, times = nrow(fit$medoids)),
+  survival = as.vector(t(fit$medoids)),
+  cluster  = factor(rep(seq_len(nrow(fit$medoids)), each = grid_n))
+)
+
+ggplot(curf, aes(time, survival, group = id, colour = cluster)) +
+  geom_line(linewidth = 0.25, alpha = 0.20) +
+  geom_line(data = medf, aes(group = cluster), linewidth = 1.1) +
+  labs(x = "Months", y = "Predicted survival probability", colour = "Cluster") +
+  theme_minimal(base_size = 11)
 ```
 
-## Predict cluster membership for new curves
+### Out-of-sample assignment
 
-New curves must use the same time grid as the fit. Preprocessing (clamping, monotonicity, smoothing, standardization) is reused automatically.
+The clusters are defined on the partition set; the validation patients are
+assigned out-of-sample by nearest medoid.
 
-```{r predict}
-new_curves <- S[1:5, ]
-predict(fit, new_curves)
+```{r metabric-predict}
+val_clusters <- predict(fit, mb$S_validation)
+table(validation = val_clusters)
 ```
 
-## Stability assessment
+### Compare against a scalar-risk baseline
 
-Resampling gives a sense of how stable the clustering is to perturbations.
+A common alternative is to cluster a single risk summary. Here we take the
+predicted risk `1 - S(t)` at the median grid time and run PAM on it, then
+assign the validation set by nearest cluster mean.
 
-```{r stability}
+```{r metabric-baseline}
+h <- which.min(abs(mb$times - stats::median(mb$times)))
+risk_p <- 1 - mb$S_partition[, h]
+risk_v <- 1 - mb$S_validation[, h]
+
+pam_scalar <- cluster::pam(as.matrix(risk_p), k = 3)
+centres <- tapply(risk_p, pam_scalar$clustering, mean)
+scalar_v <- vapply(risk_v, function(v) which.min(abs(v - centres)), integer(1))
+```
+
+`unsurv_compare()` summarizes each partition against the observed outcomes ---
+per-cluster Kaplan-Meier medians --- and reports the Adjusted Rand Index of
+each partition against a reference. (A log-rank test is deliberately not
+reported: the partitions are fit to separate the curves, so a log-rank test
+against those same labels is circular.)
+
+```{r metabric-compare-partition, eval = has_survival}
+cmp_part <- unsurv_compare(
+  list(`unsurv curve` = fit$clusters, `scalar risk` = pam_scalar$clustering),
+  mb$os_time$partition, mb$os_event$partition,
+  reference = "unsurv curve"
+)
+cmp_part$summary
+cmp_part$cluster_summary
+```
+
+Repeating on the held-out validation set checks that the survival ordering of
+the clusters generalizes:
+
+```{r metabric-compare-validation, eval = has_survival}
+cmp_val <- unsurv_compare(
+  list(`unsurv curve` = val_clusters, `scalar risk` = scalar_v),
+  mb$os_time$validation, mb$os_event$validation,
+  reference = "unsurv curve"
+)
+cmp_val$cluster_summary
+```
+
+```{r metabric-km, fig.cap = "Kaplan-Meier curves by unsurv cluster on the validation set.", eval = has_survival}
+autoplot(unsurv_compare(
+  list(`unsurv curve` = val_clusters),
+  mb$os_time$validation, mb$os_event$validation
+))
+```
+
+### Stability
+
+Resampling the partition set gives a sense of how reproducible the clustering
+is under perturbation.
+
+```{r metabric-stability}
 stab <- unsurv_stability(
-  S, times, fit,
-  B = 20, frac = 0.7,
-  mode = "subsample",
-  jitter_sd = 0.01,
-  weight_perturb = 0.05,
+  mb$S_partition, mb$times, fit,
+  B = 30, frac = 0.7, mode = "subsample",
+  jitter_sd = 0.005, weight_perturb = 0.1, eps_jitter = 0,
   return_distribution = TRUE
-  )
+)
 stab$mean
 ```
 
@@ -101,11 +232,11 @@ Higher mean ARI indicates more reproducible clusters.
 
 ## Tips and troubleshooting
 
-- Ensure `times` is strictly increasing and matches the number of columns in `S`.
-- If curves show small upward wiggles, keep `enforce_monotone = TRUE` or increase `smooth_median_width` to an odd integer ≥ 3.
-- Use `distance = "L1"` when robustness to large deviations at a few time points is desired.
-- Setting `weights` lets you emphasize clinically important time windows. Weights are normalized internally.
-
-## Reproducibility
-
-Set `seed` inside `unsurv()` for deterministic PAM initialization and silhouette selection. Vignette figures may differ slightly because of noise added to simulated curves.
+- `times` must be strictly increasing and match the number of columns in `S`.
+- If curves show small upward wiggles, keep `enforce_monotone = TRUE` or
+  increase `smooth_median_width` to an odd integer >= 3.
+- Use `distance = "L1"` for robustness to large deviations at a few time points.
+- `weights` lets you emphasize clinically important time windows; weights are
+  normalized internally.
+- Set `seed` inside `unsurv()` for deterministic PAM initialization and
+  silhouette-based `K` selection.

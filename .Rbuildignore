@@ -14,3 +14,6 @@ README\.Rmd$
 ^CRAN-SUBMISSION$
 ^unsurv_0\.1\.0$
 ^\.Rproj\.user$
+^data-raw$
+^unsurv_.*\.tar\.gz$
+^unsurv\.Rcheck$
