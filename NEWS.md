@@ -1,3 +1,9 @@
+unsurv 0.7.0 (2026-08-30)
+-------------------------
+- Added the published method reference (El Badisy, 2026, Bioinformatics Advances,
+  <doi:10.1093/bioadv/vbag218>) to `DESCRIPTION` and switched `CITATION` to the
+  article entry.
+
 unsurv 0.6.0 (2026-07-22)
 -------------------------
 - Added `unsurv_compare()` to summarize and compare multiple cluster partitions

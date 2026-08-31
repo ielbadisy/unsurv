@@ -1,8 +1,12 @@
 bibentry(
-  bibtype = "Manual",
-  title   = "unsurv: Unsupervised Clustering of Individualized Survival Curves",
-  author  = person(given = "Imad", family = "El Badisy"),
-  year    = "2026",
-  note    = "R package version 0.5.0",
-  url     = "https://github.com/ielbadisy/unsurv"
+  bibtype   = "Article",
+  title     = "unsurv: clustering individualized survival curves",
+  author    = person(given = "Imad", family = "El Badisy"),
+  journal   = "Bioinformatics Advances",
+  year      = "2026",
+  volume    = "6",
+  number    = "1",
+  pages     = "vbag218",
+  doi       = "10.1093/bioadv/vbag218",
+  publisher = "Oxford University Press"
 )
