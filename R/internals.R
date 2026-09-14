@@ -66,23 +66,38 @@
   stats::dist(X, method = ifelse(distance == "L2", "euclidean", "manhattan"))
 }
 
+# tidyr::pivot_longer() replacement for the simple "melt these columns, keep
+# the rest as id columns" case used by the plot helpers below.
+.pivot_longer_simple <- function(df, cols, names_to, values_to) {
+  id_cols <- setdiff(names(df), cols)
+  n <- nrow(df)
+  k <- length(cols)
+  row_idx <- rep(seq_len(n), each = k)
+  id_part <- df[row_idx, id_cols, drop = FALSE]
+  name_part <- rep(cols, times = n)
+  value_cols <- df[, cols, drop = FALSE]
+  value_part <- do.call(c, lapply(seq_len(n), function(i) unlist(value_cols[i, ], use.names = FALSE)))
+  out <- cbind(id_part, stats::setNames(
+    data.frame(name_part, value_part, stringsAsFactors = FALSE),
+    c(names_to, values_to)
+  ))
+  rownames(out) <- NULL
+  out
+}
+
 
 #' Plot medoid curves with ggplot2 (internal helper)
 #' @keywords internal
 plot_surv_medoids <- function(fit) {
   if (!requireNamespace("ggplot2", quietly = TRUE) ||
-      !requireNamespace("tidyr", quietly = TRUE) ||
       !requireNamespace("scales", quietly = TRUE)) {
-    stop("Install ggplot2, tidyr, scales for plotting.", call. = FALSE)
+    stop("Install ggplot2, scales for plotting.", call. = FALSE)
   }
   med <- as.data.frame(fit$medoids)
   colnames(med) <- paste0("t", seq_along(fit$times))
   med$cluster <- factor(seq_len(nrow(med)))
 
-  long <- tidyr::pivot_longer(
-    med, cols = grep("^t", names(med), value = TRUE),
-    names_to = "gid", values_to = "S"
-  )
+  long <- .pivot_longer_simple(med, grep("^t", names(med), value = TRUE), "gid", "S")
   long$t <- fit$times[as.integer(sub("t", "", long$gid))]
 
   ggplot2::ggplot(long, ggplot2::aes(t, S, color = cluster)) +
@@ -98,19 +113,15 @@ plot_surv_medoids <- function(fit) {
 #' Plot individual curves with ggplot2 (internal helper)
 #' @keywords internal
 plot_surv_samples <- function(S, times, clusters = NULL, alpha = 0.2) {
-  if (!requireNamespace("ggplot2", quietly = TRUE) ||
-      !requireNamespace("tidyr", quietly = TRUE)) {
-    stop("Install ggplot2, tidyr for plotting.", call. = FALSE)
+  if (!requireNamespace("ggplot2", quietly = TRUE)) {
+    stop("Install ggplot2 for plotting.", call. = FALSE)
   }
   S <- as.data.frame(S)
   colnames(S) <- paste0("t", seq_along(times))
   S$id <- seq_len(nrow(S))
   if (!is.null(clusters)) S$cluster <- factor(clusters)
 
-  long <- tidyr::pivot_longer(
-    S, cols = grep("^t", names(S), value = TRUE),
-    names_to = "gid", values_to = "S"
-  )
+  long <- .pivot_longer_simple(S, grep("^t", names(S), value = TRUE), "gid", "S")
   long$t <- times[as.integer(sub("t", "", long$gid))]
 
   ggplot2::ggplot(long, ggplot2::aes(

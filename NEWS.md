@@ -1,3 +1,9 @@
+unsurv 0.7.2
+------------
+- Dropped the `tidyr` dependency: `plot_surv_medoids()`/`plot_surv_samples()`'s
+  `pivot_longer()` reshape step is replaced by a new internal
+  `.pivot_longer_simple()` (base R).
+
 unsurv 0.7.1
 ------------
 - Dropped the `dplyr` dependency: `plot_surv_medoids()`/`plot_surv_samples()`
