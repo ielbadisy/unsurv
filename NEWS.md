@@ -1,3 +1,11 @@
+unsurv 0.7.1
+------------
+- Dropped the `dplyr` dependency: `plot_surv_medoids()`/`plot_surv_samples()`
+  used `dplyr::starts_with("t")` (tidyselect column matching) and
+  `dplyr::mutate()` only inside their internal reshape step, both replaced
+  with base R (`grep("^t", names(x))`, plain column assignment). `tidyr`
+  (the actual reshape call, `pivot_longer()`) is unaffected.
+
 unsurv 0.7.0 (2026-08-30)
 -------------------------
 - Added the published method reference (El Badisy, 2026, Bioinformatics Advances,

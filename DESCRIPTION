@@ -1,6 +1,6 @@
 Package: unsurv
 Title: Unsupervised Clustering of Individualized Survival Curves
-Version: 0.7.0
+Version: 0.7.1
 Authors@R: c(
     person("Imad", "El Badisy", email = "elbadisyimad@gmail.com", role = c("aut", "cre")))
 Author: Imad El Badisy [aut, cre]
@@ -25,7 +25,6 @@ Imports:
     ggplot2
 Suggests:
     tidyr,
-    dplyr,
     scales,
     survival,
     testthat (>= 3.0.0),

@@ -72,19 +72,18 @@
 plot_surv_medoids <- function(fit) {
   if (!requireNamespace("ggplot2", quietly = TRUE) ||
       !requireNamespace("tidyr", quietly = TRUE) ||
-      !requireNamespace("dplyr", quietly = TRUE) ||
       !requireNamespace("scales", quietly = TRUE)) {
-    stop("Install ggplot2, tidyr, dplyr, scales for plotting.", call. = FALSE)
+    stop("Install ggplot2, tidyr, scales for plotting.", call. = FALSE)
   }
   med <- as.data.frame(fit$medoids)
   colnames(med) <- paste0("t", seq_along(fit$times))
   med$cluster <- factor(seq_len(nrow(med)))
 
   long <- tidyr::pivot_longer(
-    med, dplyr::starts_with("t"),
+    med, cols = grep("^t", names(med), value = TRUE),
     names_to = "gid", values_to = "S"
-  ) |>
-    dplyr::mutate(t = fit$times[as.integer(sub("t", "", gid))])
+  )
+  long$t <- fit$times[as.integer(sub("t", "", long$gid))]
 
   ggplot2::ggplot(long, ggplot2::aes(t, S, color = cluster)) +
     ggplot2::geom_line(linewidth = 1) +
@@ -100,9 +99,8 @@ plot_surv_medoids <- function(fit) {
 #' @keywords internal
 plot_surv_samples <- function(S, times, clusters = NULL, alpha = 0.2) {
   if (!requireNamespace("ggplot2", quietly = TRUE) ||
-      !requireNamespace("tidyr", quietly = TRUE) ||
-      !requireNamespace("dplyr", quietly = TRUE)) {
-    stop("Install ggplot2, tidyr, dplyr for plotting.", call. = FALSE)
+      !requireNamespace("tidyr", quietly = TRUE)) {
+    stop("Install ggplot2, tidyr for plotting.", call. = FALSE)
   }
   S <- as.data.frame(S)
   colnames(S) <- paste0("t", seq_along(times))
@@ -110,10 +108,10 @@ plot_surv_samples <- function(S, times, clusters = NULL, alpha = 0.2) {
   if (!is.null(clusters)) S$cluster <- factor(clusters)
 
   long <- tidyr::pivot_longer(
-    S, dplyr::starts_with("t"),
+    S, cols = grep("^t", names(S), value = TRUE),
     names_to = "gid", values_to = "S"
-  ) |>
-    dplyr::mutate(t = times[as.integer(sub("t", "", gid))])
+  )
+  long$t <- times[as.integer(sub("t", "", long$gid))]
 
   ggplot2::ggplot(long, ggplot2::aes(
     t, S, group = id,
