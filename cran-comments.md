@@ -1,6 +1,6 @@
 ## Resubmission
 
-This is a resubmission (version 0.7.0). Changes since the previous submission:
+This is a resubmission (version 0.7.2). Changes since the previous submission:
 
 - The `Description` field now points to the published method reference,
   El Badisy (2026) <doi:10.1093/bioadv/vbag218>, and `inst/CITATION` was
@@ -10,6 +10,8 @@ This is a resubmission (version 0.7.0). Changes since the previous submission:
 - The introductory vignette gained the paper's worked example, run from a small
   pre-computed data set in `inst/extdata/` (no additional packages needed at
   build time).
+- Dropped the `dplyr` and `tidyr` dependencies: the two plot helpers'
+  internal reshape step now uses base R only.
 
 ## Test environments
 
