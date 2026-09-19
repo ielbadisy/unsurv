@@ -4,8 +4,7 @@ unsurv: Unsupervised Clustering of Individualized Survival Curves
 # unsurv
 
 <!-- badges: start -->
-<!-- CRAN status (activate after submission) -->
-<!-- [![CRAN status](https://www.r-pkg.org/badges/version/unsurv)](https://CRAN.R-project.org/package=unsurv) -->
+[![CRAN status](https://www.r-pkg.org/badges/version/unsurv)](https://CRAN.R-project.org/package=unsurv)
 <!-- R CMD check -->
 <!-- [![R-CMD-check](https://github.com/ielbadisy/unsurv/actions/workflows/R-CMD-check.yaml/badge.svg)](https://github.com/ielbadisy/unsurv/actions) -->
 <!-- License -->
@@ -44,7 +43,7 @@ install.packages("remotes")
 remotes::install_github("ielbadisy/unsurv")
 ```
 
-## From CRAN (after submission)
+## From CRAN
 
 ``` r
 install.packages("unsurv")
