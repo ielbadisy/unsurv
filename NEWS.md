@@ -1,3 +1,8 @@
+unsurv 0.7.3
+------------
+- Vignette: the METABRIC cohort is now cited from the **biobench** package
+  (was **biostatlab**). Documentation only; no code or API changes.
+
 unsurv 0.7.2
 ------------
 - Dropped the `tidyr` dependency: `plot_surv_medoids()`/`plot_surv_samples()`'s

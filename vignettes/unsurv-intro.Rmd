@@ -91,7 +91,7 @@ The file `extdata/metabric_survdnn_curves.rds` reproduces the worked example in
 It was produced by `data-raw/metabric_survdnn_curves.R` with the same pipeline
 as the paper's scripts:
 
-* the METABRIC cohort from the **biostatlab** package, overall survival in
+* the METABRIC cohort from the **biobench** package, overall survival in
   months as the outcome;
 * a single 60/20/20 split (seed `20260615`) into train / partition / validation;
 * a deep accelerated-failure-time survival network (**survdnn**, `loss = "aft"`)
@@ -103,7 +103,7 @@ as the paper's scripts:
 The shipped object contains **only** model-predicted probabilities and the
 `(time, status)` pair for each patient --- no METABRIC covariates or patient
 identifiers --- so the vignette reproduces the paper figure without importing
-`survdnn`, `biostatlab`, or `torch` at build time. Regenerate it by running
+`survdnn`, `biobench`, or `torch` at build time. Regenerate it by running
 `data-raw/metabric_survdnn_curves.R` from the package root.
 
 ```{r metabric-load}
