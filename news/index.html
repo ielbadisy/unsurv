@@ -64,6 +64,8 @@
 <code><a href="../reference/unsurv_stability.html">unsurv_stability()</a></code> refitted every resample with trapezoid weights, ignoring the <code>weights</code> of <code>fit</code>; it now uses <code>fit$weights</code> (bug fix; results unchanged for fits with default weights).</li>
 <li>
 <code><a href="../reference/unsurv_stability.html">unsurv_stability()</a></code> gains a <code>seed</code> argument (default <code>NULL</code>, previous behaviour).</li>
+<li>
+<code><a href="../reference/plot.unsurv.html">plot.unsurv()</a></code> drew a legend with black lines only, unrelated to the coloured curves. A new <code>col</code> argument (default one colour per cluster, as before for the curves) now sets both the curves and the legend (bug fix).</li>
 </ul></div>
     <div class="section level2">
 <h2 class="page-header" data-toc-text="0.7.3" id="unsurv-073">unsurv 0.7.3<a class="anchor" aria-label="anchor" href="#unsurv-073"></a></h2>
