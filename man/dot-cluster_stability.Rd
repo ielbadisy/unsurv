@@ -12,6 +12,7 @@
   mode = c("subsample", "bootstrap"),
   jitter_sd = 0.001,
   weight_perturb = 0.001,
+  weights = NULL,
   seed = NULL,
   return_distribution = TRUE,
   ...

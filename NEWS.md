@@ -4,6 +4,9 @@ unsurv 0.7.4
   instead of half of one, i.e. twice their trapezoid weight. They now follow the trapezoid rule
   (bug fix). Weighted distances, and hence clusterings, silhouettes and stability scores with
   default weights, change slightly; results with user-supplied `weights` are unchanged.
+- `unsurv_stability()` refitted every resample with trapezoid weights, ignoring the `weights` of
+  `fit`; it now uses `fit$weights` (bug fix; results unchanged for fits with default weights).
+- `unsurv_stability()` gains a `seed` argument (default `NULL`, previous behaviour).
 
 unsurv 0.7.3
 ------------

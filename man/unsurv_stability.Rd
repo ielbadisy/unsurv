@@ -14,7 +14,8 @@ unsurv_stability(
   jitter_sd = 0.01,
   weight_perturb = 0.3,
   eps_jitter = 0.02,
-  return_distribution = TRUE
+  return_distribution = TRUE,
+  seed = NULL
 )
 }
 \arguments{
@@ -34,12 +35,15 @@ unsurv_stability(
 
 \item{jitter_sd}{Nonnegative numeric; curve-space noise level applied before clamping/monotone enforcement.}
 
-\item{weight_perturb}{Numeric in \eqn{[0,1]}; blends trapezoidal weights with a random simplex
-to perturb the weighting scheme.}
+\item{weight_perturb}{Numeric in \eqn{[0,1]}; blends the time weights of \code{fit} with a
+random simplex to perturb the weighting scheme.}
 
 \item{eps_jitter}{Nonnegative numeric; feature-space jitter used inside the clustering during resamples.}
 
 \item{return_distribution}{Logical; if \code{TRUE}, returns the full ARI distribution, else returns only the mean.}
+
+\item{seed}{Optional integer seed for the resampling; \code{NULL} (default) uses the current
+random number stream.}
 }
 \value{
 If \code{return_distribution = TRUE}, a list with:
@@ -52,6 +56,10 @@ Otherwise, returns a single numeric mean ARI.
 \description{
 Computes a resampling-based stability score for a fitted \code{unsurv} model
 using the Adjusted Rand Index (ARI) computed on overlap sets across resamples.
+}
+\details{
+Each resample is refitted with the settings of \code{fit}, including its time weights
+\code{fit$weights}.
 }
 \examples{
 if (requireNamespace("cluster", quietly = TRUE)) {

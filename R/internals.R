@@ -158,6 +158,7 @@ plot_surv_samples <- function(S, times, clusters = NULL, alpha = 0.2) {
     mode = c("subsample", "bootstrap"),
     jitter_sd = 0.001,
     weight_perturb = 0.001,
+    weights = NULL,
     seed = NULL,
     return_distribution = TRUE,
     ...   # forwarded to unsurv()
@@ -173,6 +174,7 @@ plot_surv_samples <- function(S, times, clusters = NULL, alpha = 0.2) {
   base_args <- list(...)
   base_args <- base_args[names(base_args) %in% pam_formals]
   base_args$seed <- NULL
+  w0 <- if (is.null(weights)) .trap_weights(times) else weights / sum(weights)
 
   for (b in seq_len(B)) {
     m <- max(2, floor(frac * n))
@@ -186,8 +188,8 @@ plot_surv_samples <- function(S, times, clusters = NULL, alpha = 0.2) {
     }
 
     args_b <- base_args
+    args_b$weights <- w0
     if (weight_perturb > 0) {
-      w0 <- .trap_weights(times)
       z  <- stats::rexp(length(w0), 1); z <- z / sum(z)
       args_b$weights <- (1 - weight_perturb) * w0 + weight_perturb * z
     }
