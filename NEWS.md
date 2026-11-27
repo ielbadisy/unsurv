@@ -10,6 +10,9 @@ unsurv 0.7.4
 - `plot.unsurv()` drew a legend with black lines only, unrelated to the coloured curves. A new
   `col` argument (default one colour per cluster, as before for the curves) now sets both the
   curves and the legend (bug fix).
+- Removed a dead duplicate definition of `unsurv()` in `R/plot.R` (the one in `R/unsurv.R` was
+  always the one used). The help page no longer repeats the usage, description and details;
+  the function and its arguments are unchanged.
 
 unsurv 0.7.3
 ------------

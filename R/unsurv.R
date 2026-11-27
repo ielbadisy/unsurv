@@ -1,10 +1,9 @@
-#' Unsupervised clustering of survival curves
+#' Unsupervised clustering of individualized survival curves
 #'
-#' Fits an unsupervised clustering model on survival-probability curves evaluated
-#' on a common time grid. Clustering is performed using PAM (Partitioning Around
-#' Medoids) on a weighted feature representation of the curves.
-#'
-#' If \code{K} is \code{NULL}, the number of clusters is selected by maximizing
+#' Clusters individuals using their survival-probability curves evaluated on a
+#' common time grid. The method computes a weighted feature representation of
+#' the curves and applies PAM (Partitioning Around Medoids) on the resulting
+#' dissimilarity matrix. If \code{K} is not provided, it is selected by maximizing
 #' the mean silhouette width over \code{K = 2, ..., K_max}.
 #'
 #' @param S Numeric matrix of survival probabilities with shape \eqn{n \times m}.
@@ -22,11 +21,44 @@
 #' @param seed Optional integer seed.
 #'
 #' @details
-#' Requires the \pkg{cluster} package (recommended in \code{Suggests}).
+#' This function requires the \pkg{cluster} package for PAM clustering and
+#' silhouette widths.
 #'
-#' @return An object of class \code{"unsurv"}.
+#' The returned object stores medoid curves and metadata required for prediction
+#' on new curves via \code{\link[stats]{predict}} (method \code{predict.unsurv}).
+#'
+#' @return An object of class \code{"unsurv"} with components including:
+#' \itemize{
+#'   \item \code{clusters}: integer vector of cluster assignments
+#'   \item \code{K}: number of clusters
+#'   \item \code{times}: time grid
+#'   \item \code{medoids}: medoid survival curves (one per cluster)
+#'   \item \code{silhouette_mean}: mean silhouette width
+#'   \item plus preprocessing/settings fields used for prediction
+#' }
 #'
 #' @examples
+#' if (requireNamespace("cluster", quietly = TRUE)) {
+#'   set.seed(2025)
+#'   n <- 40; Q <- 30
+#'   times <- seq(0, 5, length.out = Q)
+#'   rates <- c(0.12, 0.38, 0.8)
+#'   grp <- sample(1:3, n, TRUE, c(0.4, 0.4, 0.2))
+#'   S <- t(vapply(1:n, function(i)
+#'     pmin(pmax(exp(-rates[grp[i]] * times) + rnorm(Q, 0, 0.01), 0), 1),
+#'     numeric(Q)
+#'   ))
+#'
+#'   fit <- unsurv(S, times, K = NULL, K_max = 6, distance = "L2",
+#'                enforce_monotone = TRUE, standardize_cols = FALSE,
+#'                eps_jitter = 0, seed = NULL)
+#'   print(fit)
+#'   summary(fit)
+#'   plot(fit)
+#'
+#'   pred <- predict(fit, S[1:5, ])
+#'   pred
+#' }
 #' if (requireNamespace("cluster", quietly = TRUE)) {
 #'   set.seed(1)
 #'   n <- 40
