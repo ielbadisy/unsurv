@@ -99,10 +99,15 @@ print.summary.unsurv <- function(x, ...) {
 #' @param mode Resampling mode: \code{"bootstrap"} (with replacement) or
 #'   \code{"subsample"} (without replacement).
 #' @param jitter_sd Nonnegative numeric; curve-space noise level applied before clamping/monotone enforcement.
-#' @param weight_perturb Numeric in \eqn{[0,1]}; blends trapezoidal weights with a random simplex
-#'   to perturb the weighting scheme.
+#' @param weight_perturb Numeric in \eqn{[0,1]}; blends the time weights of \code{fit} with a
+#'   random simplex to perturb the weighting scheme.
 #' @param eps_jitter Nonnegative numeric; feature-space jitter used inside the clustering during resamples.
 #' @param return_distribution Logical; if \code{TRUE}, returns the full ARI distribution, else returns only the mean.
+#' @param seed Optional integer seed for the resampling; \code{NULL} (default) uses the current
+#'   random number stream.
+#'
+#' @details Each resample is refitted with the settings of \code{fit}, including its time weights
+#'   \code{fit$weights}.
 #'
 #' @return If \code{return_distribution = TRUE}, a list with:
 #'   \itemize{
@@ -139,7 +144,8 @@ unsurv_stability <- function(
     jitter_sd = 0.01,
     weight_perturb = 0.30,
     eps_jitter = 0.02,
-    return_distribution = TRUE
+    return_distribution = TRUE,
+    seed = NULL
 ){
   mode <- match.arg(mode)
   stopifnot(inherits(fit, "unsurv"))
@@ -155,7 +161,8 @@ unsurv_stability <- function(
     enforce_monotone = isTRUE(fit$enforce_monotone),
     smooth_median_width = ifelse(is.null(fit$smooth_median_width), 0, fit$smooth_median_width),
     eps_jitter = eps_jitter,
-    seed = NULL,
+    weights = fit$weights,
+    seed = seed,
     return_distribution = return_distribution
   )
 }

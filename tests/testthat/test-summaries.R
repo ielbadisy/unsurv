@@ -30,3 +30,26 @@ test_that("unsurv_stability errors on dimension mismatch", {
     "dimension mismatch"
   )
 })
+
+test_that("unsurv_stability refits with the weights of fit", {
+  skip_if_not_installed("cluster")
+  dat <- make_toy_curves(n = 20, Q = 10, seed = 8)
+  w <- c(rep(0, 9), 1)
+  fit <- unsurv(dat$S, dat$times, K = 2, weights = w, eps_jitter = 0)
+  seen <- list()
+  local_mocked_bindings(unsurv = function(S, times, K = NULL, weights = NULL, ...) {
+    seen <<- c(seen, list(weights))
+    list(clusters = rep(1:2, length.out = nrow(S)))
+  })
+  unsurv_stability(dat$S, dat$times, fit, B = 3, weight_perturb = 0)
+  expect_length(seen, 3); for (s in seen) expect_equal(s, w)
+})
+
+test_that("unsurv_stability is reproducible with seed", {
+  skip_if_not_installed("cluster")
+  dat <- make_toy_curves(n = 30, Q = 15, seed = 9)
+  fit <- unsurv(dat$S, dat$times, K = 2)
+  a <- unsurv_stability(dat$S, dat$times, fit, B = 4, seed = 3)
+  b <- unsurv_stability(dat$S, dat$times, fit, B = 4, seed = 3)
+  expect_identical(a, b)
+})
