@@ -174,6 +174,7 @@ unsurv <- function(
 #' fitted object.
 #'
 #' @param x An object of class \code{"unsurv"}.
+#' @param col Line colours, recycled over clusters; also used in the legend.
 #' @param ... Additional arguments passed to \code{\link[graphics]{matplot}}
 #'   (e.g., \code{lwd}).
 #'
@@ -190,7 +191,7 @@ unsurv <- function(
 #'   plot(fit)
 #' }
 #' @export
-plot.unsurv <- function(x, ...) {
+plot.unsurv <- function(x, col = seq_len(nrow(x$medoids)), ...) {
   stopifnot(inherits(x, "unsurv"))
   times <- x$times
   med <- x$medoids
@@ -198,9 +199,10 @@ plot.unsurv <- function(x, ...) {
   if (length(times) != ncol(med)) stop("Dimension mismatch: length(x$times) must equal ncol(x$medoids).", call. = FALSE)
 
   K <- nrow(med)
-  graphics::matplot(times, t(med), type = "l", lty = 1,
+  col <- rep_len(col, K)
+  graphics::matplot(times, t(med), type = "l", lty = 1, col = col,
                     xlab = "Time", ylab = "Survival", ...)
   graphics::legend("topright", legend = paste0("Cluster ", seq_len(K)),
-                   lty = 1, bty = "n")
+                   lty = 1, col = col, bty = "n")
   invisible(x)
 }

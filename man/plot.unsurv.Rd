@@ -4,10 +4,12 @@
 \alias{plot.unsurv}
 \title{Plot medoid survival curves from an unsurv fit}
 \usage{
-\method{plot}{unsurv}(x, ...)
+\method{plot}{unsurv}(x, col = seq_len(nrow(x$medoids)), ...)
 }
 \arguments{
 \item{x}{An object of class \code{"unsurv"}.}
+
+\item{col}{Line colours, recycled over clusters; also used in the legend.}
 
 \item{...}{Additional arguments passed to \code{\link[graphics]{matplot}}
 (e.g., \code{lwd}).}
