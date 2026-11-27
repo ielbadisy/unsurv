@@ -1,3 +1,10 @@
+unsurv 0.7.4
+------------
+- Default time weights (`weights = NULL`) gave the first and last grid points a full interval
+  instead of half of one, i.e. twice their trapezoid weight. They now follow the trapezoid rule
+  (bug fix). Weighted distances, and hence clusterings, silhouettes and stability scores with
+  default weights, change slightly; results with user-supplied `weights` are unchanged.
+
 unsurv 0.7.3
 ------------
 - Vignette: the METABRIC cohort is now cited from the **biobench** package

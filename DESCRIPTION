@@ -1,6 +1,6 @@
 Package: unsurv
 Title: Unsupervised Clustering of Individualized Survival Curves
-Version: 0.7.3
+Version: 0.7.4
 Authors@R: c(
     person("Imad", "El Badisy", email = "elbadisyimad@gmail.com", role = c("aut", "cre")))
 Author: Imad El Badisy [aut, cre]
