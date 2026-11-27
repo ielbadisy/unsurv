@@ -75,7 +75,8 @@ using the Adjusted Rand Index (ARI) computed on overlap sets across resamples.</
 <span>  jitter_sd <span class="op">=</span> <span class="fl">0.01</span>,</span>
 <span>  weight_perturb <span class="op">=</span> <span class="fl">0.3</span>,</span>
 <span>  eps_jitter <span class="op">=</span> <span class="fl">0.02</span>,</span>
-<span>  return_distribution <span class="op">=</span> <span class="cn">TRUE</span></span>
+<span>  return_distribution <span class="op">=</span> <span class="cn">TRUE</span>,</span>
+<span>  seed <span class="op">=</span> <span class="cn">NULL</span></span>
 <span><span class="op">)</span></span></code></pre></div>
     </div>
 
@@ -114,8 +115,8 @@ using the Adjusted Rand Index (ARI) computed on overlap sets across resamples.</
 
 
 <dt id="arg-weight-perturb">weight_perturb<a class="anchor" aria-label="anchor" href="#arg-weight-perturb"></a></dt>
-<dd><p>Numeric in \([0,1]\); blends trapezoidal weights with a random simplex
-to perturb the weighting scheme.</p></dd>
+<dd><p>Numeric in \([0,1]\); blends the time weights of <code>fit</code> with a
+random simplex to perturb the weighting scheme.</p></dd>
 
 
 <dt id="arg-eps-jitter">eps_jitter<a class="anchor" aria-label="anchor" href="#arg-eps-jitter"></a></dt>
@@ -125,12 +126,22 @@ to perturb the weighting scheme.</p></dd>
 <dt id="arg-return-distribution">return_distribution<a class="anchor" aria-label="anchor" href="#arg-return-distribution"></a></dt>
 <dd><p>Logical; if <code>TRUE</code>, returns the full ARI distribution, else returns only the mean.</p></dd>
 
+
+<dt id="arg-seed">seed<a class="anchor" aria-label="anchor" href="#arg-seed"></a></dt>
+<dd><p>Optional integer seed for the resampling; <code>NULL</code> (default) uses the current
+random number stream.</p></dd>
+
 </dl></div>
     <div id="value">
     <h2>Value</h2>
     <p>If <code>return_distribution = TRUE</code>, a list with:</p><ul><li><p><code>mean</code>: mean ARI across resample-pair overlaps</p></li>
 <li><p><code>aris</code>: numeric vector of ARIs</p></li>
 </ul><p>Otherwise, returns a single numeric mean ARI.</p>
+    </div>
+    <div id="details">
+    <h2>Details</h2>
+    <p>Each resample is refitted with the settings of <code>fit</code>, including its time weights
+<code>fit$weights</code>.</p>
     </div>
 
     <div id="ref-examples">
