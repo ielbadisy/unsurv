@@ -84,3 +84,11 @@ test_that("unsurv handles distance, weights, and automatic K selection", {
   expect_true(fit$K >= 2 && fit$K <= 5)
   expect_true(is.finite(fit$silhouette_mean))
 })
+
+test_that("default weights are the trapezoid rule", {
+  tt <- c(0, 1, 3, 4, 7)
+  w <- unsurv:::.trap_weights(tt)
+  f <- function(t) 1 + t
+  expect_equal(sum(w * f(tt)) * diff(range(tt)), sum(diff(tt) * (f(tt)[-1] + f(tt)[-5]) / 2))
+  expect_equal(w, c(0.5, 1.5, 1.5, 2, 1.5) / 7)
+})

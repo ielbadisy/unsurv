@@ -48,9 +48,9 @@
   if (Q < 2) return(rep(1 / Q, Q))
   dt <- diff(times)
   w <- numeric(Q)
-  w[1] <- dt[1]
+  w[1] <- dt[1] / 2
   if (Q > 2) w[2:(Q - 1)] <- (dt[-1] + dt[-length(dt)]) / 2
-  w[Q] <- dt[length(dt)]
+  w[Q] <- dt[length(dt)] / 2
   w / sum(w)
 }
 
