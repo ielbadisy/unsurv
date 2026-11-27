@@ -7,6 +7,9 @@ unsurv 0.7.4
 - `unsurv_stability()` refitted every resample with trapezoid weights, ignoring the `weights` of
   `fit`; it now uses `fit$weights` (bug fix; results unchanged for fits with default weights).
 - `unsurv_stability()` gains a `seed` argument (default `NULL`, previous behaviour).
+- `plot.unsurv()` drew a legend with black lines only, unrelated to the coloured curves. A new
+  `col` argument (default one colour per cluster, as before for the curves) now sets both the
+  curves and the legend (bug fix).
 
 unsurv 0.7.3
 ------------

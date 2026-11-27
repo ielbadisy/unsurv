@@ -92,3 +92,18 @@ test_that("default weights are the trapezoid rule", {
   expect_equal(sum(w * f(tt)) * diff(range(tt)), sum(diff(tt) * (f(tt)[-1] + f(tt)[-5]) / 2))
   expect_equal(w, c(0.5, 1.5, 1.5, 2, 1.5) / 7)
 })
+
+test_that("plot.unsurv legend colours match the curves", {
+  skip_if_not_installed("cluster")
+  dat <- make_toy_curves(n = 30, Q = 15, seed = 10)
+  fit <- unsurv(dat$S, dat$times, K = 3, eps_jitter = 0)
+  e <- new.env(); g <- asNamespace("graphics")
+  suppressMessages({
+    trace("legend", bquote(assign("lcol", col, envir = .(e))), print = FALSE, where = g)
+    trace("matplot", bquote(assign("mcol", col, envir = .(e))), print = FALSE, where = g)
+  })
+  on.exit(suppressMessages({untrace("legend", where = g); untrace("matplot", where = g)}))
+  pdf(NULL); plot(fit, col = c("red", "blue")); dev.off()
+  expect_equal(e$lcol, c("red", "blue", "red"))
+  expect_equal(e$mcol, e$lcol)
+})
