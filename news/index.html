@@ -66,6 +66,7 @@
 <code><a href="../reference/unsurv_stability.html">unsurv_stability()</a></code> gains a <code>seed</code> argument (default <code>NULL</code>, previous behaviour).</li>
 <li>
 <code><a href="../reference/plot.unsurv.html">plot.unsurv()</a></code> drew a legend with black lines only, unrelated to the coloured curves. A new <code>col</code> argument (default one colour per cluster, as before for the curves) now sets both the curves and the legend (bug fix).</li>
+<li>Removed a dead duplicate definition of <code><a href="../reference/unsurv.html">unsurv()</a></code> in <code>R/plot.R</code> (the one in <code>R/unsurv.R</code> was always the one used). The help page no longer repeats the usage, description and details; the function and its arguments are unchanged.</li>
 </ul></div>
     <div class="section level2">
 <h2 class="page-header" data-toc-text="0.7.3" id="unsurv-073">unsurv 0.7.3<a class="anchor" aria-label="anchor" href="#unsurv-073"></a></h2>
