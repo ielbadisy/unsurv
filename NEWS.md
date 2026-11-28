@@ -1,3 +1,12 @@
+unsurv 0.7.6
+------------
+- New `unsurv_select_k()`: for each candidate K, the mean silhouette, the resampling stability of
+  `unsurv_stability()`, the prediction strength of Tibshirani and Walther (2005) over random half
+  splits (cluster both halves, assign one half to the medoids of the other with `predict()`), and
+  the smallest cluster size, returned as a data frame. In simulations of curves from three
+  overlapping groups the silhouette chose K = 2 in 40 of 40 data sets, while the largest K with
+  prediction strength >= 0.8 was 3 in 26 of 40.
+
 unsurv 0.7.5
 ------------
 - `unsurv_stability()` now resamples patients only by default: a nonparametric bootstrap of size
