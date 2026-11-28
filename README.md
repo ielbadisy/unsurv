@@ -208,6 +208,7 @@ Core functions:
 | plot             | visualize medoids               |
 | summary          | summarize clustering            |
 | unsurv_stability | evaluate stability              |
+| unsurv_select_k  | compare numbers of clusters     |
 | unsurv_compare   | compare partitions vs. outcomes |
 | autoplot         | ggplot visualization            |
 
