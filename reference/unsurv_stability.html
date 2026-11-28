@@ -18,7 +18,7 @@ using the Adjusted Rand Index (ARI) computed on overlap sets across resamples.">
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">unsurv</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">0.7.4</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">0.7.5</span>
       </span>
     </div>
 
@@ -70,11 +70,11 @@ using the Adjusted Rand Index (ARI) computed on overlap sets across resamples.</
 <span>  <span class="va">times</span>,</span>
 <span>  <span class="va">fit</span>,</span>
 <span>  B <span class="op">=</span> <span class="fl">30</span>,</span>
-<span>  frac <span class="op">=</span> <span class="fl">0.5</span>,</span>
+<span>  frac <span class="op">=</span> <span class="fl">1</span>,</span>
 <span>  mode <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"bootstrap"</span>, <span class="st">"subsample"</span><span class="op">)</span>,</span>
-<span>  jitter_sd <span class="op">=</span> <span class="fl">0.01</span>,</span>
-<span>  weight_perturb <span class="op">=</span> <span class="fl">0.3</span>,</span>
-<span>  eps_jitter <span class="op">=</span> <span class="fl">0.02</span>,</span>
+<span>  jitter_sd <span class="op">=</span> <span class="fl">0</span>,</span>
+<span>  weight_perturb <span class="op">=</span> <span class="fl">0</span>,</span>
+<span>  eps_jitter <span class="op">=</span> <span class="va">fit</span><span class="op">$</span><span class="va">eps_jitter</span>,</span>
 <span>  return_distribution <span class="op">=</span> <span class="cn">TRUE</span>,</span>
 <span>  seed <span class="op">=</span> <span class="cn">NULL</span></span>
 <span><span class="op">)</span></span></code></pre></div>
@@ -102,25 +102,27 @@ using the Adjusted Rand Index (ARI) computed on overlap sets across resamples.</
 
 
 <dt id="arg-frac">frac<a class="anchor" aria-label="anchor" href="#arg-frac"></a></dt>
-<dd><p>Numeric in (0, 1]; fraction of rows sampled per resample.</p></dd>
+<dd><p>Numeric in (0, 1]; size of each resample as a fraction of <code>nrow(S)</code>.</p></dd>
 
 
 <dt id="arg-mode">mode<a class="anchor" aria-label="anchor" href="#arg-mode"></a></dt>
-<dd><p>Resampling mode: <code>"bootstrap"</code> (with replacement) or
+<dd><p>Resampling mode: <code>"bootstrap"</code> (with replacement, default) or
 <code>"subsample"</code> (without replacement).</p></dd>
 
 
 <dt id="arg-jitter-sd">jitter_sd<a class="anchor" aria-label="anchor" href="#arg-jitter-sd"></a></dt>
-<dd><p>Nonnegative numeric; curve-space noise level applied before clamping/monotone enforcement.</p></dd>
+<dd><p>Nonnegative numeric; sd of Gaussian noise added to the curves before
+clamping/monotone enforcement. Default 0 (no curve noise).</p></dd>
 
 
 <dt id="arg-weight-perturb">weight_perturb<a class="anchor" aria-label="anchor" href="#arg-weight-perturb"></a></dt>
 <dd><p>Numeric in \([0,1]\); blends the time weights of <code>fit</code> with a
-random simplex to perturb the weighting scheme.</p></dd>
+random simplex to perturb the weighting scheme. Default 0 (weights of <code>fit</code>).</p></dd>
 
 
 <dt id="arg-eps-jitter">eps_jitter<a class="anchor" aria-label="anchor" href="#arg-eps-jitter"></a></dt>
-<dd><p>Nonnegative numeric; feature-space jitter used inside the clustering during resamples.</p></dd>
+<dd><p>Nonnegative numeric; feature-space tie-breaking jitter used inside each
+refit. Defaults to the value used by <code>fit</code>.</p></dd>
 
 
 <dt id="arg-return-distribution">return_distribution<a class="anchor" aria-label="anchor" href="#arg-return-distribution"></a></dt>
@@ -141,7 +143,25 @@ random number stream.</p></dd>
     <div id="details">
     <h2>Details</h2>
     <p>Each resample is refitted with the settings of <code>fit</code>, including its time weights
-<code>fit$weights</code>.</p>
+<code>fit$weights</code> and its tie-breaking jitter <code>fit$eps_jitter</code>, and the partitions of
+two refits are compared by the ARI on the patients they share (Ben-Hur et al., 2002).</p>
+<p>By default only the patients are resampled: a nonparametric bootstrap of size \(n\), the
+scheme recommended by Hennig (2007). The index then measures how reproducible the partition is
+under sampling of patients. Noise added to the curves (<code>jitter_sd</code>), to the weights
+(<code>weight_perturb</code>) or to the features (<code>eps_jitter</code> above the value of the fit) is
+available as a sensitivity analysis but is off by default: its scale is arbitrary, feature
+noise adds \(2 m \sigma^2\) to every squared distance and so grows with the number of grid
+points \(m\), and in simulations it lowered stability most for the true number of clusters
+and pulled the most stable \(K\) towards 2. Before version 0.7.5 the defaults were
+<code>frac = 0.5</code>, <code>jitter_sd = 0.01</code>, <code>weight_perturb = 0.3</code> and
+<code>eps_jitter = 0.02</code>.</p>
+    </div>
+    <div id="references">
+    <h2>References</h2>
+    <p>Ben-Hur, A., Elisseeff, A. and Guyon, I. (2002). A stability based method for discovering
+structure in clustered data. <em>Pacific Symposium on Biocomputing</em>, 7, 6–17.</p>
+<p>Hennig, C. (2007). Cluster-wise assessment of cluster stability. <em>Computational
+Statistics &amp; Data Analysis</em>, 52(1), 258–271. <a href="https://doi.org/10.1016/j.csda.2006.11.025" class="external-link">doi:10.1016/j.csda.2006.11.025</a></p>
     </div>
 
     <div id="ref-examples">
