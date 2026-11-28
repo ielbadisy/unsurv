@@ -1,3 +1,14 @@
+unsurv 0.7.5
+------------
+- `unsurv_stability()` now resamples patients only by default: a nonparametric bootstrap of size
+  n (`frac = 1`, was 0.5), no curve noise (`jitter_sd = 0`, was 0.01), no weight perturbation
+  (`weight_perturb = 0`, was 0.3), and the tie-breaking jitter of the fit
+  (`eps_jitter = fit$eps_jitter`, was 0.02). The old feature jitter added 2 m sd^2 to every squared
+  distance, so its effect grew with the number of grid points, and in simulations it lowered the
+  stability of the true number of clusters and pulled the most stable K towards 2. Stability
+  indices with default arguments are higher than before; pass the old values to reproduce them.
+  The perturbations remain available as sensitivity analyses.
+
 unsurv 0.7.4
 ------------
 - Default time weights (`weights = NULL`) gave the first and last grid points a full interval
