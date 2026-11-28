@@ -15,6 +15,7 @@
 <url><loc>/reference/dot-cluster_stability.html</loc></url>
 <url><loc>/reference/dot-enforce_monotone.html</loc></url>
 <url><loc>/reference/dot-km_cluster_medians.html</loc></url>
+<url><loc>/reference/dot-pred_strength.html</loc></url>
 <url><loc>/reference/dot-smooth_median.html</loc></url>
 <url><loc>/reference/dot-trap_weights.html</loc></url>
 <url><loc>/reference/dot-weight_features.html</loc></url>
@@ -31,6 +32,7 @@
 <url><loc>/reference/unsurv-package.html</loc></url>
 <url><loc>/reference/unsurv.html</loc></url>
 <url><loc>/reference/unsurv_compare.html</loc></url>
+<url><loc>/reference/unsurv_select_k.html</loc></url>
 <url><loc>/reference/unsurv_stability.html</loc></url>
 </urlset>
 

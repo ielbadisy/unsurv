@@ -17,7 +17,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">unsurv</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">0.7.5</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">0.7.6</span>
       </span>
     </div>
 
@@ -57,6 +57,10 @@
       <small>Source: <a href="https://github.com/ielbadisy/unsurv/blob/main/NEWS.md" class="external-link"><code>NEWS.md</code></a></small>
     </div>
 
+    <div class="section level2">
+<h2 class="page-header" data-toc-text="0.7.6" id="unsurv-076">unsurv 0.7.6<a class="anchor" aria-label="anchor" href="#unsurv-076"></a></h2>
+<ul><li>New <code><a href="../reference/unsurv_select_k.html">unsurv_select_k()</a></code>: for each candidate K, the mean silhouette, the resampling stability of <code><a href="../reference/unsurv_stability.html">unsurv_stability()</a></code>, the prediction strength of Tibshirani and Walther (2005) over random half splits (cluster both halves, assign one half to the medoids of the other with <code><a href="https://rdrr.io/r/stats/predict.html" class="external-link">predict()</a></code>), and the smallest cluster size, returned as a data frame. In simulations of curves from three overlapping groups the silhouette chose K = 2 in 40 of 40 data sets, while the largest K with prediction strength &gt;= 0.8 was 3 in 26 of 40.</li>
+</ul></div>
     <div class="section level2">
 <h2 class="page-header" data-toc-text="0.7.5" id="unsurv-075">unsurv 0.7.5<a class="anchor" aria-label="anchor" href="#unsurv-075"></a></h2>
 <ul><li>
